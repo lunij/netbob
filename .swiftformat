@@ -1,0 +1,8 @@
+--commas inline
+--decimalgrouping none
+--exclude .derivedData, DerivedData
+--header "\n Copyright © Marc Schultz. All rights reserved.\n"
+--importgrouping testable-bottom
+--indent 4
+--wrapcollections before-first
+--wrapparameters before-first

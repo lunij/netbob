@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-and-test:
+    name: Lint, Build, Test
+    runs-on: macOS-11
+    env:
+      derived-data-path: .derivedData
+    steps:
+      - name: Select Xcode
+        run: |
+          xcodebuild -version
+          ls -nt /Applications/ | grep "Xcode*"
+          sudo xcode-select -switch /Applications/Xcode_13.0.app
+          xcodebuild -version
+      - name: Checkout branch
+        uses: actions/checkout@v2
+      - name: Setup environment
+        run: make setup
+      - name: Lint
+        run: make lint
+      - name: Install dependencies and generate Xcode workspace
+        run: make generate
+      - name: Build
+        run: make build
+      - name: Test
+        run: make test
+      - name: Zip XCResults
+        if: ${{ failure() }}
+        run: |
+          cd $(dirname $(find ${{ env.derived-data-path }} -name "*.xcresult" | head -n1))
+          zip -r xcresults.zip *.xcresult
+      - name: Upload XCResults
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: xcresults.zip
+          path: ./xcresults.zip

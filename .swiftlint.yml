@@ -1,0 +1,59 @@
+disabled_rules:
+  - inclusive_language
+  - opening_brace
+excluded:
+  - .build
+  - .derivedData
+  - ./*/Derived
+  - Derived
+  - DerivedData
+  - Pods
+file_name:
+  excluded:
+    - Project.swift
+force_cast: warning
+force_try: warning
+type_name:
+  min_length:
+    warning: 3
+identifier_name:
+  allowed_symbols: _
+  excluded:
+    - qa
+    - dx
+    - dy
+    - id
+    - on
+    - x
+    - y
+    - z
+    - ok
+  min_length:
+    warning: 3
+large_tuple: 3
+nesting:
+    type_level:
+      warning: 2
+opt_in_rules:
+  - closure_spacing
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  - fallthrough
+  - fatal_error_message
+  - file_name
+  - first_where
+  - force_cast
+  - force_try
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - operator_usage_whitespace
+  - overridden_super_call
+cyclomatic_complexity: 12
+file_length:
+  ignore_comment_only_lines: true
+  warning: 550
+function_body_length: 80
+function_parameter_count: 8
+line_length: 300
+type_body_length: 300
