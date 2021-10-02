@@ -6,12 +6,17 @@ import SwiftUI
 
 struct ListView: View {
     @StateObject var state: ListViewStateAbstract
+    @State var searchText = ""
 
     var body: some View {
-        List {
-            ForEach(state.connections) { viewData in
-                NavigationLink(destination: DetailView(state: .init(connection: viewData.connection))) {
-                    ListRow(viewData: viewData)
+        VStack {
+            SearchBar(text: $searchText)
+
+            List {
+                ForEach(state.connections) { viewData in
+                    NavigationLink(destination: DetailView(state: .init(connection: viewData.connection))) {
+                        ListRow(viewData: viewData)
+                    }
                 }
             }
         }
