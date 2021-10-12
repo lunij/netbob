@@ -13,7 +13,7 @@ struct HTTPRequest: Equatable {
     let headers: [String: String]
     let method: String?
     let timeoutInterval: TimeInterval
-    let url: String
+    let url: URL?
     let urlQueryItems: [URLQueryItem]
 
     init(
@@ -27,7 +27,7 @@ struct HTTPRequest: Equatable {
         headers = request.allHTTPHeaderFields ?? [:]
         method = request.httpMethod
         timeoutInterval = request.timeoutInterval
-        url = request.url?.absoluteString ?? ""
+        url = request.url
         urlQueryItems = request.components?.queryItems ?? []
     }
 }

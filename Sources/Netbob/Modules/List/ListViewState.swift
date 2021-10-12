@@ -42,7 +42,10 @@ struct HTTPConnectionViewData: Identifiable {
     let id = UUID()
     let requestTime: String
     let requestMethod: String
-    let requestURL: String
+    let requestScheme: String
+    let requestHost: String
+    let requestPath: String
+    let requestQuery: String
     let responseStatusCode: String
     let status: Status
 
@@ -55,9 +58,22 @@ struct HTTPConnectionViewData: Identifiable {
 
 extension HTTPConnectionViewData {
     init(_ connection: HTTPConnection) {
+        if let scheme = connection.request.url?.scheme {
+            requestScheme = "\(scheme)://"
+        } else {
+            requestScheme = ""
+        }
+
+        if let query = connection.request.url?.query {
+            requestQuery = "?\(query)"
+        } else {
+            requestQuery = ""
+        }
+
         requestTime = connection.request.date.formattedTime
         requestMethod = connection.request.method ?? "-"
-        requestURL = connection.request.url
+        requestHost = connection.request.url?.host ?? ""
+        requestPath = connection.request.url?.path ?? ""
         responseStatusCode = connection.response?.statusCode ?? ""
         status = connection.status
         self.connection = connection

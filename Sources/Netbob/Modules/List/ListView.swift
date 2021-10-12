@@ -49,9 +49,14 @@ struct ListRow: View {
                 }
                 .font(.system(size: 10, design: .monospaced))
 
-                Text(viewData.requestURL)
-                    .font(.system(size: 10))
-                    .lineLimit(4)
+                (
+                    Text(viewData.requestScheme)
+                        + Text(viewData.requestHost).fontWeight(.semibold)
+                        + Text(viewData.requestPath)
+                        + Text(viewData.requestQuery).italic()
+                )
+                .font(.system(size: 10))
+                .lineLimit(4)
             }
         }
     }
@@ -72,8 +77,25 @@ extension HTTPConnectionViewData {
 
 // MARK: - Previews
 
+// swiftlint:disable force_unwrapping
+
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        ListView(state: ListViewState())
+        Group {
+            ListView(state: ListViewState())
+
+            ListRow(viewData: .init(
+                requestTime: "fakeTime",
+                requestMethod: "GET",
+                requestScheme: "https",
+                requestHost: "foobar.com",
+                requestPath: "/a/b/c",
+                requestQuery: "d=1,e=2,f=3",
+                responseStatusCode: "200",
+                status: .success,
+                connection: .init(request: HTTPRequest(from: URLRequest(url: URL(string: "https://foobar.com")!))))
+            )
+            .previewLayout(.fixed(width: 300, height: 50))
+        }
     }
 }

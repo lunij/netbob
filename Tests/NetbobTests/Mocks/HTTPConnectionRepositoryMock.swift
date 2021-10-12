@@ -13,6 +13,8 @@ class HTTPConnectionRepositoryMock: HTTPConnectionRepositoryProtocol {
 
     var calls: [Call] = []
 
+    var current: [HTTPConnection] = []
+
     lazy var connections: AnyPublisher<[HTTPConnection], Never> = connectionsSubject.eraseToAnyPublisher()
     let connectionsSubject = PassthroughSubject<[HTTPConnection], Never>()
 

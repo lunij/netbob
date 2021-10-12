@@ -72,7 +72,7 @@ class DetailViewState: ObservableObject {
             requestDate = connection.request.date.formatted
             requestMethod = connection.request.method ?? "-"
             requestTimeout = String(format: "%.1f s", connection.request.timeoutInterval)
-            requestURL = connection.request.url
+            requestURL = connection.request.url?.absoluteString ?? "-"
             responseBody = connection.response?.body
 
             requestURLQueryItems = connection.request.urlQueryItems
@@ -150,7 +150,7 @@ private extension HTTPConnection {
     private var infoString: String {
         var string = "## INFO\n"
 
-        string += "[URL]\n\(request.url)\n\n"
+        string += "[URL]\n\(request.url?.absoluteString ?? "-")\n\n"
         string += "[Method]\n\(request.method ?? "-")\n\n"
 
         if let statusCode = response?.statusCode {
