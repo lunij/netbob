@@ -45,6 +45,7 @@ struct ListRow: View {
                     Text(viewData.requestMethod)
                         .fontWeight(.semibold)
                     Text(viewData.responseStatusCode)
+                    Text(viewData.requestTime)
                 }
                 .font(.system(size: 10, design: .monospaced))
 

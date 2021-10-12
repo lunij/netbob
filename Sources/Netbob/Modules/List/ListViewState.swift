@@ -40,7 +40,7 @@ final class ListViewState: ListViewStateAbstract {
 
 struct HTTPConnectionViewData: Identifiable {
     let id = UUID()
-    let requestDate: String
+    let requestTime: String
     let requestMethod: String
     let requestURL: String
     let responseStatusCode: String
@@ -55,7 +55,7 @@ struct HTTPConnectionViewData: Identifiable {
 
 extension HTTPConnectionViewData {
     init(_ connection: HTTPConnection) {
-        requestDate = connection.request.date.description
+        requestTime = connection.request.date.formattedTime
         requestMethod = connection.request.method ?? "-"
         requestURL = connection.request.url
         responseStatusCode = connection.response?.statusCode ?? ""
