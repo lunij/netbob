@@ -16,10 +16,18 @@ struct ListView: View {
             }
         }
         .navigationBarItems(trailing: navigationBarButtons)
+        .sheet(item: $state.activityItem) { activityItem in
+            ActivitySheet(activityItem: activityItem)
+        }
     }
 
     var navigationBarButtons: some View {
         HStack(spacing: 20) {
+            Button {
+                state.handleShareAction()
+            } label: {
+                Image(systemName: "square.and.arrow.up")
+            }
             NavigationLink(destination: InfoView(state: InfoViewState())) {
                 Image(systemName: "info.circle")
             }

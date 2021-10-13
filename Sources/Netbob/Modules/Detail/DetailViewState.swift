@@ -24,7 +24,7 @@ class DetailViewState: ObservableObject {
     func handleShareAction() {
         var curlExportAction: ActionSheetState.Action?
         curlExportAction = ActionSheetState.Action.default(text: "Export request as curl") { [weak self, viewData] in
-            self?.activityItem = ActivityItem(text: viewData.requestCurl, placeholder: "placeholder")
+            self?.activityItem = ActivityItem(text: viewData.requestCurl, subject: "Export request as curl")
         }
 
         actionSheetState = .init(
@@ -32,10 +32,10 @@ class DetailViewState: ObservableObject {
             message: nil,
             actions: [
                 .default(text: "Share without body") { [weak self, viewData] in
-                    self?.activityItem = ActivityItem(text: viewData.toString(includeBody: false), placeholder: "placeholder")
+                    self?.activityItem = ActivityItem(text: viewData.toString(includeBody: false), subject: "Share without body")
                 },
                 .default(text: "Share with body") { [weak self, viewData] in
-                    self?.activityItem = ActivityItem(text: viewData.toString(includeBody: true), placeholder: "placeholder")
+                    self?.activityItem = ActivityItem(text: viewData.toString(includeBody: true), subject: "Share with body")
                 },
                 curlExportAction,
                 .cancel
@@ -104,17 +104,6 @@ class DetailViewState: ObservableObject {
         func toString(includeBody: Bool) -> String {
             connection.toString(includeBody: includeBody)
         }
-    }
-}
-
-struct ActivityItem: ActivityItemProtocol, Identifiable {
-    let text: String
-    var placeholder: Any
-
-    var id: String { text }
-
-    func item(for _: UIActivity.ActivityType?) -> Any? {
-        text
     }
 }
 

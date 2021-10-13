@@ -7,6 +7,8 @@ import Foundation
 
 class ListViewStateAbstract: ObservableObject {
     @Published var connections: [HTTPConnectionViewData] = []
+    @Published var activityItem: ActivityItem?
+    func handleShareAction() {}
 }
 
 final class ListViewState: ListViewStateAbstract {
@@ -25,6 +27,15 @@ final class ListViewState: ListViewStateAbstract {
         super.init()
 
         configureSubscriptions()
+    }
+
+    override func handleShareAction() {
+        let text = httpConnectionRepository
+            .current
+            .map { $0.toString(includeBody: true) }
+            .joined(separator: "\n\n\n\(String(repeating: "-", count: 30))\n\n\n")
+
+        activityItem = ActivityItem(text: text, subject: "Connections Logfile")
     }
 
     private func configureSubscriptions() {
