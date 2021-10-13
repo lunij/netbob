@@ -90,7 +90,7 @@ extension NetbobURLProtocol: URLSessionDataDelegate {
             connection.store(response: .init(from: response, with: responseBody))
         }
 
-        HTTPConnectionRepository.shared.add(connection)
+        HTTPConnectionRepository.shared.store(connection)
     }
 
     public func urlSession(_: URLSession, task _: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
