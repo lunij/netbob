@@ -211,6 +211,8 @@ extension HTTPConnection {
 
         if let body = request.body, let bodyString = body.prettyJson ?? String(data: body, encoding: .utf8) {
             string += bodyString
+        } else if let body = request.body {
+            string += String(describing: body)
         } else {
             string += "Request body is empty"
         }
@@ -241,6 +243,8 @@ extension HTTPConnection {
 
         if let body = response.body, let bodyString = body.prettyJson ?? String(data: body, encoding: .utf8) {
             string += bodyString
+        } else if let body = response.body {
+            string += String(describing: body)
         } else {
             string += "Response body is empty"
         }
