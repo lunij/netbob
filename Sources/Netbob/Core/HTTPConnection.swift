@@ -99,6 +99,8 @@ class HTTPConnection: Codable, Equatable {
     private(set) var request: HTTPRequest
     private(set) var response: HTTPResponse?
 
+    var isFromCurrentSession = true
+
     var timeInterval: TimeInterval? {
         response?.date.timeIntervalSince(request.date).absolute
     }
@@ -122,6 +124,11 @@ class HTTPConnection: Codable, Equatable {
 
     static func == (lhs: HTTPConnection, rhs: HTTPConnection) -> Bool {
         lhs.request == rhs.request && lhs.response == rhs.response
+    }
+
+    private enum CodingKeys: CodingKey {
+        case request
+        case response
     }
 }
 

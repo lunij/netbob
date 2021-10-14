@@ -45,7 +45,9 @@ final class HTTPConnectionDiskStorage: HTTPConnectionDiskStorageProtocol {
     func read() throws -> [HTTPConnection] {
         try contentsOfLogDirectory().map { url in
             let data = try readAction(url)
-            return try jsonDecoder.decode(HTTPConnection.self, from: data)
+            let connection = try jsonDecoder.decode(HTTPConnection.self, from: data)
+            connection.isFromCurrentSession = false
+            return connection
         }
     }
 

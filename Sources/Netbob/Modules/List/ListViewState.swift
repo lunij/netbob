@@ -59,6 +59,7 @@ struct HTTPConnectionViewData: Identifiable {
     let requestQuery: String
     let responseStatusCode: String
     let status: Status
+    let isFromCurrentSession: Bool
 
     let connection: HTTPConnection
 
@@ -87,6 +88,7 @@ extension HTTPConnectionViewData {
         requestPath = connection.request.url?.path ?? ""
         responseStatusCode = connection.response?.statusCode ?? ""
         status = connection.status
+        isFromCurrentSession = connection.isFromCurrentSession
         self.connection = connection
     }
 }
