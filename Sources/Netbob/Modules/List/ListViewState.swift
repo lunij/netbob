@@ -7,6 +7,8 @@ import Foundation
 
 class ListViewStateAbstract: ObservableObject {
     @Published var connections: [HTTPConnectionViewData] = []
+    @Published var activityItem: ActivityItem?
+    func handleShareAction() {}
 }
 
 final class ListViewState: ListViewStateAbstract {
@@ -27,6 +29,15 @@ final class ListViewState: ListViewStateAbstract {
         configureSubscriptions()
     }
 
+    override func handleShareAction() {
+        let text = httpConnectionRepository
+            .current
+            .map { $0.toString(includeBody: true) }
+            .joined(separator: "\n\n\n\(String(repeating: "-", count: 30))\n\n\n")
+
+        activityItem = ActivityItem(text: text, subject: "Connections Logfile")
+    }
+
     private func configureSubscriptions() {
         httpConnectionRepository
             .connections
@@ -40,11 +51,15 @@ final class ListViewState: ListViewStateAbstract {
 
 struct HTTPConnectionViewData: Identifiable {
     let id = UUID()
-    let requestDate: String
+    let requestTime: String
     let requestMethod: String
-    let requestURL: String
+    let requestScheme: String
+    let requestHost: String
+    let requestPath: String
+    let requestQuery: String
     let responseStatusCode: String
     let status: Status
+    let isFromCurrentSession: Bool
 
     let connection: HTTPConnection
 
@@ -55,11 +70,25 @@ struct HTTPConnectionViewData: Identifiable {
 
 extension HTTPConnectionViewData {
     init(_ connection: HTTPConnection) {
-        requestDate = connection.request.date.description
+        if let scheme = connection.request.url?.scheme {
+            requestScheme = "\(scheme)://"
+        } else {
+            requestScheme = ""
+        }
+
+        if let query = connection.request.url?.query {
+            requestQuery = "?\(query)"
+        } else {
+            requestQuery = ""
+        }
+
+        requestTime = connection.request.date.formattedTime
         requestMethod = connection.request.method ?? "-"
-        requestURL = connection.request.url
+        requestHost = connection.request.url?.host ?? ""
+        requestPath = connection.request.url?.path ?? ""
         responseStatusCode = connection.response?.statusCode ?? ""
         status = connection.status
+        isFromCurrentSession = connection.isFromCurrentSession
         self.connection = connection
     }
 }

@@ -30,9 +30,12 @@ class ListViewStateTests: XCTestCase {
 
         XCTAssertEqual(sut.connections.count, 3)
         let firstConnection = try XCTUnwrap(sut.connections.first)
-        XCTAssertEqual(firstConnection.requestDate, "1970-01-01 00:00:00 +0000")
+        XCTAssertEqual(firstConnection.requestTime, "00:00:00.000")
         XCTAssertEqual(firstConnection.requestMethod, "GET")
-        XCTAssertEqual(firstConnection.requestURL, "http://fake.abc?a=1,b=2,c=3")
+        XCTAssertEqual(firstConnection.requestScheme, "http://")
+        XCTAssertEqual(firstConnection.requestHost, "fake.abc")
+        XCTAssertEqual(firstConnection.requestPath, "/fake/path")
+        XCTAssertEqual(firstConnection.requestQuery, "?a=1,b=2,c=3")
         XCTAssertEqual(firstConnection.responseStatusCode, "200")
         XCTAssertEqual(firstConnection.status, .success)
     }

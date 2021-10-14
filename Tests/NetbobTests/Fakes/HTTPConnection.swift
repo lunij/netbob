@@ -36,7 +36,7 @@ extension HTTPRequest {
 extension URLRequest {
     static func fake() -> URLRequest {
         .init(
-            url: URL(string: "http://fake.abc?a=1,b=2,c=3")!,
+            url: URL(string: "http://fake.abc/fake/path?a=1,b=2,c=3")!,
             cachePolicy: .useProtocolCachePolicy,
             timeoutInterval: 10
         )

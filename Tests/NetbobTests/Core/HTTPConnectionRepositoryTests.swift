@@ -9,6 +9,8 @@ import XCTest
 // swiftlint:disable implicitly_unwrapped_optional
 
 class HTTPConnectionRepositoryTests: XCTestCase {
+    var mockDiskStorage: HTTPConnectionDiskStorageMock!
+
     var sut: HTTPConnectionRepository!
 
     private var subscriptions = Set<AnyCancellable>()
@@ -16,14 +18,16 @@ class HTTPConnectionRepositoryTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        sut = HTTPConnectionRepository()
+        mockDiskStorage = HTTPConnectionDiskStorageMock()
+
+        sut = HTTPConnectionRepository(diskStorage: mockDiskStorage)
     }
 
     func test_adding() {
         var connections: [HTTPConnection]?
 
         sut.connections.sink { connections = $0 }.store(in: &subscriptions)
-        sut.add(.fake())
+        sut.store(.fake())
 
         XCTAssertEqual(connections, [.fake()])
     }
@@ -32,8 +36,8 @@ class HTTPConnectionRepositoryTests: XCTestCase {
         // given
         var connections: [HTTPConnection]?
         sut.connections.sink { connections = $0 }.store(in: &subscriptions)
-        sut.add(.fake())
-        sut.add(.fake())
+        sut.store(.fake())
+        sut.store(.fake())
         XCTAssertEqual(connections, [.fake(), .fake()])
 
         // when

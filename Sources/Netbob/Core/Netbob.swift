@@ -33,4 +33,8 @@ public final class Netbob {
     public func createView() -> AnyView {
         AnyView(ListView(state: ListViewState()))
     }
+
+    static func log(_ string: String) {
+        print("[\(Self.self) 0.1.0] \(string)")
+    }
 }

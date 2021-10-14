@@ -17,12 +17,12 @@ class DetailViewStateTests: XCTestCase {
         let sut = DetailViewState(connection: .fake(response: nil))
 
         XCTAssertEqual(sut.viewData.requestBody, .fake)
-        XCTAssertEqual(sut.viewData.requestCurl, "curl http://fake.abc?a=1,b=2,c=3 -X GET")
+        XCTAssertEqual(sut.viewData.requestCurl, "curl http://fake.abc/fake/path?a=1,b=2,c=3 -X GET")
         XCTAssertEqual(sut.viewData.requestDate, "1970-01-01 00:00:00 GMT")
         XCTAssertEqual(sut.viewData.requestHeaders, [])
         XCTAssertEqual(sut.viewData.requestMethod, "GET")
         XCTAssertEqual(sut.viewData.requestTimeout, "10.0 s")
-        XCTAssertEqual(sut.viewData.requestURL, "http://fake.abc?a=1,b=2,c=3")
+        XCTAssertEqual(sut.viewData.requestURL, "http://fake.abc/fake/path?a=1,b=2,c=3")
 
         XCTAssertEqual(sut.viewData.responseBody, nil)
         XCTAssertEqual(sut.viewData.responseDate, "-")
@@ -34,12 +34,12 @@ class DetailViewStateTests: XCTestCase {
         let sut = DetailViewState(connection: .fake(response: .fake()))
 
         XCTAssertEqual(sut.viewData.requestBody, .fake)
-        XCTAssertEqual(sut.viewData.requestCurl, "curl http://fake.abc?a=1,b=2,c=3 -X GET")
+        XCTAssertEqual(sut.viewData.requestCurl, "curl http://fake.abc/fake/path?a=1,b=2,c=3 -X GET")
         XCTAssertEqual(sut.viewData.requestDate, "1970-01-01 00:00:00 GMT")
         XCTAssertEqual(sut.viewData.requestHeaders, [])
         XCTAssertEqual(sut.viewData.requestMethod, "GET")
         XCTAssertEqual(sut.viewData.requestTimeout, "10.0 s")
-        XCTAssertEqual(sut.viewData.requestURL, "http://fake.abc?a=1,b=2,c=3")
+        XCTAssertEqual(sut.viewData.requestURL, "http://fake.abc/fake/path?a=1,b=2,c=3")
 
         XCTAssertEqual(sut.viewData.responseBody, .fake)
         XCTAssertEqual(sut.viewData.responseDate, "1970-01-01 00:00:02 GMT")

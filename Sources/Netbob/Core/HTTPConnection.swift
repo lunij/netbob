@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct HTTPRequest: Equatable {
+struct HTTPRequest: Codable, Equatable {
     var body: Data?
     let cachePolicy: String
     let contentType: String?
@@ -13,7 +13,7 @@ struct HTTPRequest: Equatable {
     let headers: [String: String]
     let method: String?
     let timeoutInterval: TimeInterval
-    let url: String
+    let url: URL?
     let urlQueryItems: [URLQueryItem]
 
     init(
@@ -27,12 +27,12 @@ struct HTTPRequest: Equatable {
         headers = request.allHTTPHeaderFields ?? [:]
         method = request.httpMethod
         timeoutInterval = request.timeoutInterval
-        url = request.url?.absoluteString ?? ""
+        url = request.url
         urlQueryItems = request.components?.queryItems ?? []
     }
 }
 
-struct HTTPResponse: Equatable {
+struct HTTPResponse: Codable, Equatable {
     let body: Data?
     let contentType: HTTPContentType?
     let date: Date
@@ -68,7 +68,7 @@ struct HTTPResponse: Equatable {
     }
 }
 
-enum HTTPContentType: CaseIterable {
+enum HTTPContentType: Codable, CaseIterable {
     case json
     case xml
     case html
@@ -95,9 +95,11 @@ enum HTTPContentType: CaseIterable {
     }
 }
 
-class HTTPConnection: Equatable {
+class HTTPConnection: Codable, Equatable {
     private(set) var request: HTTPRequest
     private(set) var response: HTTPResponse?
+
+    var isFromCurrentSession = true
 
     var timeInterval: TimeInterval? {
         response?.date.timeIntervalSince(request.date).absolute
@@ -123,6 +125,31 @@ class HTTPConnection: Equatable {
     static func == (lhs: HTTPConnection, rhs: HTTPConnection) -> Bool {
         lhs.request == rhs.request && lhs.response == rhs.response
     }
+
+    private enum CodingKeys: CodingKey {
+        case request
+        case response
+    }
+}
+
+extension URLQueryItem: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let name = try container.decode(String.self, forKey: .name)
+        let value = try container.decodeIfPresent(String.self, forKey: .value)
+        self.init(name: name, value: value)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encodeIfPresent(value, forKey: .value)
+    }
+
+    enum CodingKeys: CodingKey {
+        case name
+        case value
+    }
 }
 
 private extension URLResponse {
@@ -134,5 +161,101 @@ private extension URLResponse {
 private extension TimeInterval {
     var absolute: Self {
         abs(self)
+    }
+}
+
+extension HTTPConnection {
+    func toString(includeBody: Bool) -> String {
+        """
+        \(infoString)
+
+        \(requestString(includeBody))
+
+        \(responseString(includeBody))
+        """
+    }
+
+    private var infoString: String {
+        var string = "## INFO\n"
+
+        string += "[URL]\n\(request.url?.absoluteString ?? "-")\n\n"
+        string += "[Method]\n\(request.method ?? "-")\n\n"
+
+        if let statusCode = response?.statusCode {
+            string += "[Status]\n\(statusCode)\n\n"
+        }
+
+        string += "[Request date]\n\(request.date)\n\n"
+
+        if let response = response {
+            string += "[Response date]\n\(response.date)\n\n"
+        }
+
+        if let timeInterval = timeInterval {
+            string += "[Time interval]\n\(timeInterval)\n\n"
+        }
+
+        string += "[Timeout]\n\(request.timeoutInterval)\n\n"
+        string += "[Cache policy]\n\(request.cachePolicy)"
+
+        return string
+    }
+
+    private func requestString(_ includeBody: Bool) -> String {
+        var string = "## REQUEST\n\n### Headers\n\n"
+
+        if request.headers.count > 0 {
+            for (key, value) in request.headers {
+                string += "[\(key)]\n\(value)\n\n"
+            }
+        } else {
+            string += "Request headers are empty\n\n"
+        }
+
+        guard includeBody else { return string }
+
+        string += "### Body\n\n"
+
+        if let body = request.body, let bodyString = body.prettyJson ?? String(data: body, encoding: .utf8) {
+            string += bodyString
+        } else if let body = request.body {
+            string += String(describing: body)
+        } else {
+            string += "Request body is empty"
+        }
+
+        return string
+    }
+
+    private func responseString(_ includeBody: Bool) -> String {
+        var string = "## RESPONSE\n\n"
+
+        guard let response = response else {
+            return string + "No response"
+        }
+
+        string += "### Headers\n\n"
+
+        if response.headers.count > 0 {
+            for (key, value) in response.headers {
+                string += "[\(key)]\n\(value)\n\n"
+            }
+        } else {
+            string += "Response headers are empty\n\n"
+        }
+
+        guard includeBody else { return string }
+
+        string += "### Body\n\n"
+
+        if let body = response.body, let bodyString = body.prettyJson ?? String(data: body, encoding: .utf8) {
+            string += bodyString
+        } else if let body = response.body {
+            string += String(describing: body)
+        } else {
+            string += "Response body is empty"
+        }
+
+        return string
     }
 }

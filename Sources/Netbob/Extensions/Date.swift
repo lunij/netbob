@@ -12,6 +12,22 @@ extension Date {
         formatter.timeZone = TimeZoneProvider.shared.current
         return formatter.string(from: self)
     }
+
+    var formattedTime: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss.SSS"
+        formatter.locale = .current
+        formatter.timeZone = TimeZoneProvider.shared.current
+        return formatter.string(from: self)
+    }
+
+    func formatted(_ dateFormat: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = dateFormat
+        formatter.locale = .current
+        formatter.timeZone = TimeZoneProvider.shared.current
+        return formatter.string(from: self)
+    }
 }
 
 final class TimeZoneProvider {
