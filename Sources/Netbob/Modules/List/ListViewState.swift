@@ -7,7 +7,7 @@ import Foundation
 
 class ListViewStateAbstract: ObservableObject {
     @Published var connections: [HTTPConnectionViewData] = []
-    @Published var activityItem: ActivityItem?
+    @Published var activitySheetState: ActivitySheetState?
     func handleShareAction() {}
 }
 
@@ -35,7 +35,7 @@ final class ListViewState: ListViewStateAbstract {
             .map { $0.toString(includeBody: true) }
             .joined(separator: "\n\n\n\(String(repeating: "-", count: 30))\n\n\n")
 
-        activityItem = ActivityItem(text: text, subject: "Connections Logfile")
+        activitySheetState = ActivitySheetState(items: ["HTTP Logfile", text])
     }
 
     private func configureSubscriptions() {
