@@ -15,6 +15,8 @@ class FileManagerMock: FileManagerProtocol {
 
     var calls: [Call] = []
 
+    var temporaryDirectory = URL(string: "tmp")! // swiftlint:disable:this force_unwrapping
+
     var contentsOfDirectoryReturnValue: [URL] = []
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys _: [URLResourceKey]?, options _: FileManager.DirectoryEnumerationOptions) throws -> [URL] {
         calls.append(.contentsOfDirectory(url.absoluteString))

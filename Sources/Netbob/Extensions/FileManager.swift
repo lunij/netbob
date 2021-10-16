@@ -5,6 +5,7 @@
 import Foundation
 
 protocol FileManagerProtocol {
+    var temporaryDirectory: URL { get }
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?, options mask: FileManager.DirectoryEnumerationOptions) throws -> [URL]
     func createDirectory(at url: URL, withIntermediateDirectories createIntermediates: Bool, attributes: [FileAttributeKey: Any]?) throws
     func removeItem(at url: URL) throws
