@@ -5,42 +5,39 @@
 import SwiftUI
 
 struct ActivitySheet: UIViewControllerRepresentable {
-    var activityItem: ActivityItemProtocol
-    var applicationActivities: [UIActivity]?
+    var state: ActivitySheetState
 
-    func makeUIViewController(context: Context) -> some UIViewController {
+    func makeUIViewController(context _: Context) -> some UIViewController {
         let controller = UIActivityViewController(
-            activityItems: [context.coordinator],
-            applicationActivities: applicationActivities
+            activityItems: state.items,
+            applicationActivities: nil
         )
-        controller.modalPresentationStyle = .automatic
+        controller.excludedActivityTypes = state.excludedActivityTypes
         return controller
     }
 
     func updateUIViewController(_: UIViewControllerType, context _: Context) {}
+}
 
-    func makeCoordinator() -> Coordinator {
-        Coordinator(activityItem)
+struct ActivitySheetState: Identifiable {
+    let id = UUID()
+    let items: [Any]
+    private(set) var excludedActivityTypes: [UIActivity.ActivityType] = []
+}
+
+extension View {
+    func activitySheet(state: Binding<ActivitySheetState?>) -> some View {
+        sheet(item: state) { state in
+            ActivitySheet(state: state)
+        }
     }
+}
 
-    class Coordinator: NSObject, UIActivityItemSource {
-        private let activityItem: ActivityItemProtocol
+// MARK: - Previews
 
-        init(_ activityItem: ActivityItemProtocol) {
-            self.activityItem = activityItem
-            super.init()
-        }
-
-        func activityViewControllerPlaceholderItem(_: UIActivityViewController) -> Any {
-            activityItem.placeholder
-        }
-
-        func activityViewController(_: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-            activityItem.item(for: activityType)
-        }
-
-        func activityViewController(_: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
-            activityItem.subject(for: activityType)
-        }
+struct ActivitySheet_Previews: PreviewProvider {
+    static var previews: some View {
+        Text("")
+            .activitySheet(state: .constant(ActivitySheetState(items: ["text"])))
     }
 }

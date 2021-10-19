@@ -4,43 +4,48 @@
 
 import UIKit
 
-protocol DetailViewStateDelegate: AnyObject {
-    func presentBody(_ bodyString: String)
-    func presentImageBody(_ bodyString: String)
-}
-
 class DetailViewState: ObservableObject {
-    weak var delegate: DetailViewStateDelegate?
-
     @Published var actionSheetState: ActionSheetState?
-    @Published var activityItem: ActivityItem?
+    @Published var activitySheetState: ActivitySheetState?
 
     let viewData: ViewData
 
-    init(connection: HTTPConnection) {
+    private let logFileProvider: LogFileProviderProtocol
+
+    init(
+        connection: HTTPConnection,
+        logFileProvider: LogFileProviderProtocol = LogFileProvider()
+    ) {
         viewData = ViewData(from: connection)
+        self.logFileProvider = logFileProvider
     }
 
     func handleShareAction() {
-        var curlExportAction: ActionSheetState.Action?
-        curlExportAction = ActionSheetState.Action.default(text: "Export request as curl") { [weak self, viewData] in
-            self?.activityItem = ActivityItem(text: viewData.requestCurl, subject: "Export request as curl")
-        }
-
         actionSheetState = .init(
             title: "Choose what to share",
             message: nil,
             actions: [
-                .default(text: "Share without body") { [weak self, viewData] in
-                    self?.activityItem = ActivityItem(text: viewData.toString(includeBody: false), subject: "Share without body")
+                .default(text: "Share without body") { [weak self] in
+                    self?.shareSingleLog(includeBody: false)
                 },
-                .default(text: "Share with body") { [weak self, viewData] in
-                    self?.activityItem = ActivityItem(text: viewData.toString(includeBody: true), subject: "Share with body")
+                .default(text: "Share with body") { [weak self] in
+                    self?.shareSingleLog(includeBody: true)
                 },
-                curlExportAction,
+                .default(text: "Export request as curl") { [weak self, viewData] in
+                    self?.activitySheetState = .init(items: [viewData.requestCurl])
+                },
                 .cancel
             ].compactMap { $0 }
         )
+    }
+
+    private func shareSingleLog(includeBody: Bool) {
+        do {
+            let logFileUrl = try logFileProvider.createSingleLog(from: viewData.connection, includeBody: includeBody)
+            activitySheetState = .init(items: [logFileUrl])
+        } catch {
+            Netbob.log(String(describing: error))
+        }
     }
 
     struct ViewData {
@@ -61,7 +66,7 @@ class DetailViewState: ObservableObject {
 
         let timeInterval: String
 
-        private let connection: HTTPConnection
+        fileprivate let connection: HTTPConnection
 
         init(from connection: HTTPConnection) {
             self.connection = connection
@@ -99,10 +104,6 @@ class DetailViewState: ObservableObject {
             } else {
                 responseStatus = "-"
             }
-        }
-
-        func toString(includeBody: Bool) -> String {
-            connection.toString(includeBody: includeBody)
         }
     }
 }

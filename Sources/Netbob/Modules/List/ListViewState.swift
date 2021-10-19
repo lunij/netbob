@@ -7,21 +7,24 @@ import Foundation
 
 class ListViewStateAbstract: ObservableObject {
     @Published var connections: [HTTPConnectionViewData] = []
-    @Published var activityItem: ActivityItem?
+    @Published var activitySheetState: ActivitySheetState?
     func handleShareAction() {}
 }
 
 final class ListViewState: ListViewStateAbstract {
     private let httpConnectionRepository: HTTPConnectionRepositoryProtocol
+    private let logFileProvider: LogFileProviderProtocol
 
     private let scheduler: AnyScheduler<DispatchQueue>
     private var subscriptions = Set<AnyCancellable>()
 
     init(
         httpConnectionRepository: HTTPConnectionRepositoryProtocol = HTTPConnectionRepository.shared,
+        logFileProvider: LogFileProviderProtocol = LogFileProvider(),
         scheduler: AnyScheduler<DispatchQueue> = .main
     ) {
         self.httpConnectionRepository = httpConnectionRepository
+        self.logFileProvider = logFileProvider
         self.scheduler = scheduler
 
         super.init()
@@ -30,12 +33,12 @@ final class ListViewState: ListViewStateAbstract {
     }
 
     override func handleShareAction() {
-        let text = httpConnectionRepository
-            .current
-            .map { $0.toString(includeBody: true) }
-            .joined(separator: "\n\n\n\(String(repeating: "-", count: 30))\n\n\n")
-
-        activityItem = ActivityItem(text: text, subject: "Connections Logfile")
+        do {
+            let logFileUrl = try logFileProvider.createFullLog()
+            activitySheetState = ActivitySheetState(items: [logFileUrl])
+        } catch {
+            Netbob.log(String(describing: error))
+        }
     }
 
     private func configureSubscriptions() {

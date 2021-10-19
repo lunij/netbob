@@ -16,9 +16,7 @@ struct ListView: View {
             }
         }
         .navigationBarItems(trailing: navigationBarButtons)
-        .sheet(item: $state.activityItem) { activityItem in
-            ActivitySheet(activityItem: activityItem)
-        }
+        .activitySheet(state: $state.activitySheetState)
     }
 
     var navigationBarButtons: some View {

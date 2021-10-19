@@ -28,9 +28,7 @@ struct DetailView: View {
             .actionSheet(item: $state.actionSheetState) { state in
                 ActionSheet(state: state)
             }
-            .sheet(item: $state.activityItem) { activityItem in
-                ActivitySheet(activityItem: activityItem)
-            }
+            .activitySheet(state: $state.activitySheetState)
         }
     }
 }
