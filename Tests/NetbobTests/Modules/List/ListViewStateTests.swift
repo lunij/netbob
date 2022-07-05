@@ -21,12 +21,25 @@ class ListViewStateTests: XCTestCase {
         )
     }
 
-    func test_createsViewData() throws {
+    func test_no_subscription_without_onAppear() {
+        XCTAssertEqual(sut.connections.count, 0)
+        mockHttpConnectionRepository.connectionSubject.send(.fake())
         XCTAssertEqual(sut.connections.count, 0)
 
-        mockHttpConnectionRepository.connectionsSubject.send([
-            .fake(), .fake(response: nil), .fake()
-        ])
+    }
+
+    func test_createsViewData() throws {
+        guard let gmt = TimeZone(secondsFromGMT: 0) else {
+            XCTFail("GMT could not be initialized")
+            return
+        }
+        TimeZoneProvider.shared.current = gmt
+
+        sut.onAppear()
+
+        mockHttpConnectionRepository.connectionSubject.send(.fake())
+        mockHttpConnectionRepository.connectionSubject.send(.fake(response: nil))
+        mockHttpConnectionRepository.connectionSubject.send(.fake())
 
         XCTAssertEqual(sut.connections.count, 3)
         let firstConnection = try XCTUnwrap(sut.connections.first)
@@ -38,5 +51,19 @@ class ListViewStateTests: XCTestCase {
         XCTAssertEqual(firstConnection.requestQuery, "?a=1,b=2,c=3")
         XCTAssertEqual(firstConnection.responseStatusCode, "200")
         XCTAssertEqual(firstConnection.status, .success)
+    }
+
+    func test_no_subscription_after_onDisappear() {
+        XCTAssertEqual(sut.connections.count, 0)
+
+        sut.onAppear()
+        mockHttpConnectionRepository.connectionSubject.send(.fake())
+
+        XCTAssertEqual(sut.connections.count, 1)
+
+        sut.onDisappear()
+        mockHttpConnectionRepository.connectionSubject.send(.fake())
+
+        XCTAssertEqual(sut.connections.count, 0)
     }
 }

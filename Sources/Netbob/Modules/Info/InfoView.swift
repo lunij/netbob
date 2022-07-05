@@ -31,6 +31,12 @@ struct InfoView: View {
                 KeyValueView(key: "Slowest response time", value: state.summaryViewData.slowestResponseTime)
             }
         }
+        .onAppear {
+            state.onAppear()
+        }
+        .onDisappear {
+            state.onDisappear()
+        }
     }
 }
 

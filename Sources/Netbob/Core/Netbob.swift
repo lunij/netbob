@@ -9,6 +9,7 @@ public final class Netbob {
     public static let version = "0.1.0"
 
     public var blacklistedHosts: [String] = []
+    public var maxListItems: Int?
 
     var allowedContentTypes: [HTTPContentType] {
         get { HTTPConnectionRepository.shared.allowedContentTypes.value }

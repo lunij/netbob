@@ -38,12 +38,20 @@ class InfoViewStateTests: XCTestCase {
         XCTAssertEqual(sut.summaryViewData.totalResponseBodySize, "-")
     }
 
+    func test_no_subscription_without_onAppear() {
+        mockHttpConnectionRepository.connectionSubject.send(.fake())
+        XCTAssertEqual(sut.summaryViewData.requestCount, "0")
+    }
+
     func test_createsViewData_whenConnectionsWithoutResponses() {
-        mockHttpConnectionRepository.connectionsSubject.send([
+        mockHttpConnectionRepository.current = [
             .fake(response: nil),
             .fake(response: nil),
             .fake(response: nil)
-        ])
+        ]
+        sut.onAppear()
+
+        mockHttpConnectionRepository.connectionSubject.send(.fake())
 
         XCTAssertEqual(sut.interfaceViewData, [])
         XCTAssertEqual(sut.summaryViewData.requestCount, "3")
@@ -59,11 +67,10 @@ class InfoViewStateTests: XCTestCase {
     }
 
     func test_createsViewData_whenConnectionsWithResponses() {
-        mockHttpConnectionRepository.connectionsSubject.send([
-            .fake(response: .fake()),
-            .fake(response: .fake()),
-            .fake(response: .fake())
-        ])
+        mockHttpConnectionRepository.current = [.fake(), .fake(), .fake()]
+        sut.onAppear()
+
+        mockHttpConnectionRepository.connectionSubject.send(.fake())
 
         XCTAssertEqual(sut.interfaceViewData, [])
         XCTAssertEqual(sut.summaryViewData.requestCount, "3")
@@ -76,5 +83,20 @@ class InfoViewStateTests: XCTestCase {
         XCTAssertEqual(sut.summaryViewData.slowestResponseTime, "2 seconds")
         XCTAssertEqual(sut.summaryViewData.totalRequestBodySize, "1.5 kilobytes")
         XCTAssertEqual(sut.summaryViewData.totalResponseBodySize, "1.5 kilobytes")
+    }
+
+    func test_no_subscription_after_onDisappear() {
+        mockHttpConnectionRepository.current = [.fake()]
+        sut.onAppear()
+        mockHttpConnectionRepository.connectionSubject.send(.fake())
+
+        XCTAssertEqual(sut.summaryViewData.requestCount, "1")
+
+        mockHttpConnectionRepository.current = [.fake(), .fake()]
+
+        sut.onDisappear()
+        mockHttpConnectionRepository.connectionSubject.send(.fake())
+
+        XCTAssertEqual(sut.summaryViewData.requestCount, "1")
     }
 }

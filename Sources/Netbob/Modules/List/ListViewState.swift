@@ -8,6 +8,8 @@ import Foundation
 class ListViewStateAbstract: ObservableObject {
     @Published var connections: [HTTPConnectionViewData] = []
     @Published var activitySheetState: ActivitySheetState?
+    func onAppear() {}
+    func onDisappear() {}
     func handleShareAction() {}
 }
 
@@ -28,8 +30,17 @@ final class ListViewState: ListViewStateAbstract {
         self.scheduler = scheduler
 
         super.init()
+    }
 
+    override func onAppear() {
+        initViewData()
         configureSubscriptions()
+    }
+
+    override func onDisappear() {
+        subscriptions.forEach { $0.cancel() }
+        subscriptions.removeAll()
+        connections.removeAll()
     }
 
     override func handleShareAction() {
@@ -41,12 +52,21 @@ final class ListViewState: ListViewStateAbstract {
         }
     }
 
+    // MARK: - Private
+
+    private func initViewData() {
+        connections = httpConnectionRepository.current
+            .prefix(Netbob.shared.maxListItems ?? .max)
+            .map(HTTPConnectionViewData.init)
+    }
+
     private func configureSubscriptions() {
         httpConnectionRepository
-            .connections
+            .latestConnection
+            .map(HTTPConnectionViewData.init)
             .receive(on: scheduler)
-            .sink { [weak self] connections in
-                self?.connections = connections.map(HTTPConnectionViewData.init)
+            .sink { [weak self] connection in
+                self?.connections.insert(connection, at: 0)
             }
             .store(in: &subscriptions)
     }
