@@ -25,7 +25,6 @@ class ListViewStateTests: XCTestCase {
         XCTAssertEqual(sut.connections.count, 0)
         mockHttpConnectionRepository.connectionSubject.send(.fake())
         XCTAssertEqual(sut.connections.count, 0)
-
     }
 
     func test_createsViewData() throws {
