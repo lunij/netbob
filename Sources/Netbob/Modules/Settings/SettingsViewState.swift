@@ -9,6 +9,7 @@ class SettingsViewStateAbstract: ObservableObject {
     @Published var contentTypes: [ContentTypeSetting] = []
     @Published var actionSheetState: ActionSheetState?
     @Published var blacklistedHosts: [String] = []
+    @Published var maxItems: Int?  = Netbob.shared.maxListItems
 
     func handleClearAction() {}
 }
