@@ -6,7 +6,7 @@ import SwiftUI
 
 public final class Netbob {
     public static let shared = Netbob()
-    public static let version = "0.1.0"
+    public static let version = "0.4.0"
 
     public var blacklistedHosts: [String] = []
     public var maxListItems: Int?
@@ -36,6 +36,6 @@ public final class Netbob {
     }
 
     static func log(_ string: String) {
-        print("[\(Self.self) 0.1.0] \(string)")
+        print("[\(Self.self) \(version)] \(string)")
     }
 }
