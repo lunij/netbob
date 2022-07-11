@@ -38,17 +38,16 @@ struct SettingsView: View {
 
                 Section {
                     VStack {
-
                         state.maxItems != nil ? Text("List limit: \(state.maxItems ?? 0)") : Text("List limit: no limit")
 
                         Slider(
                             value: maxItemsBinding,
-                            in: 100...1100,
+                            in: 100 ... 1100,
                             step: 100,
                             label: { Text("Max list items") },
                             minimumValueLabel: { Text("\(100)") },
                             maximumValueLabel: { Text("no limit") },
-                            onEditingChanged: { value in
+                            onEditingChanged: { _ in
                                 Netbob.shared.maxListItems = state.maxItems
                             }
                         )
