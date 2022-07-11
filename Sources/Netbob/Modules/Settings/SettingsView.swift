@@ -7,6 +7,8 @@ import SwiftUI
 struct SettingsView: View {
     @StateObject var state: SettingsViewStateAbstract
 
+    private let maxItemsText = "MaxItems: "
+
     var body: some View {
         VStack {
             Form {
@@ -33,6 +35,24 @@ struct SettingsView: View {
                     }
                     .foregroundColor(.red)
                 }
+
+                Section {
+                    VStack {
+                        state.maxItems != nil ? Text("List limit: \(state.maxItems ?? 0)") : Text("List limit: no limit")
+
+                        Slider(
+                            value: maxItemsBinding,
+                            in: 100 ... 1100,
+                            step: 100,
+                            label: { Text("Max list items") },
+                            minimumValueLabel: { Text("\(100)") },
+                            maximumValueLabel: { Text("no limit") },
+                            onEditingChanged: { _ in
+                                Netbob.shared.maxListItems = state.maxItems
+                            }
+                        )
+                    }
+                }
             }
 
             Text(Netbob.version)
@@ -40,6 +60,14 @@ struct SettingsView: View {
         .navigationTitle("Settings")
         .actionSheet(item: $state.actionSheetState) { state in
             ActionSheet(state: state)
+        }
+    }
+
+    var maxItemsBinding: Binding<Double> {
+        .init {
+            Double(state.maxItems ?? 1100)
+        } set: { newValue in
+            state.maxItems = newValue == 1100 ? nil : Int(newValue)
         }
     }
 }

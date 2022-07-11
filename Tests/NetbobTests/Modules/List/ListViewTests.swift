@@ -8,9 +8,22 @@ import XCTest
 
 class ListViewTests: XCTestCase {
     func test_listView() {
+        guard let gmt = TimeZone(secondsFromGMT: 0) else {
+            XCTFail("GMT could not be initialized")
+            return
+        }
+        TimeZoneProvider.shared.current = gmt
+
         let view = ListView(state: ListViewStateMock())
 
-        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhoneSe), traits: .init(userInterfaceStyle: .light)))
+        assertSnapshot(
+            matching: view,
+            as: .image(
+                precision: 0.9995,
+                layout: .device(config: .iPhoneSe),
+                traits: .init(userInterfaceStyle: .light)
+            )
+        )
     }
 }
 

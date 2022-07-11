@@ -15,11 +15,8 @@ class HTTPConnectionRepositoryMock: HTTPConnectionRepositoryProtocol {
 
     var current: [HTTPConnection] = []
 
-    lazy var connections: AnyPublisher<[HTTPConnection], Never> = connectionsSubject.eraseToAnyPublisher()
-    let connectionsSubject = PassthroughSubject<[HTTPConnection], Never>()
-
-    lazy var filteredConnections: AnyPublisher<[HTTPConnection], Never> = filteredConnectionsSubject.eraseToAnyPublisher()
-    let filteredConnectionsSubject = PassthroughSubject<[HTTPConnection], Never>()
+    lazy var latestConnection: AnyPublisher<HTTPConnection, Never> = connectionSubject.eraseToAnyPublisher()
+    let connectionSubject = PassthroughSubject<HTTPConnection, Never>()
 
     var allowedContentTypes = CurrentValueSubject<[HTTPContentType], Never>(HTTPContentType.allCases)
 

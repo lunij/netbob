@@ -24,26 +24,27 @@ class HTTPConnectionRepositoryTests: XCTestCase {
     }
 
     func test_adding() {
-        var connections: [HTTPConnection]?
+        var connection: HTTPConnection?
 
-        sut.connections.sink { connections = $0 }.store(in: &subscriptions)
+        sut.latestConnection.sink { connection = $0 }.store(in: &subscriptions)
         sut.store(.fake())
 
-        XCTAssertEqual(connections, [.fake()])
+        XCTAssertEqual(connection, .fake())
     }
 
-    func test_clearing() {
+    func test_store_and_clearing() {
         // given
-        var connections: [HTTPConnection]?
-        sut.connections.sink { connections = $0 }.store(in: &subscriptions)
+        mockDiskStorage.readReturnValue = [.fake(), .fake()]
+        XCTAssertEqual(sut.current, [.fake(), .fake()])
         sut.store(.fake())
         sut.store(.fake())
-        XCTAssertEqual(connections, [.fake(), .fake()])
+        XCTAssertEqual(sut.current, [.fake(), .fake(), .fake(), .fake()])
+        XCTAssertEqual(mockDiskStorage.calls, [.read, .store, .store])
 
         // when
         sut.clear()
 
         // then
-        XCTAssertEqual(connections, [])
+        XCTAssertEqual(sut.current, [])
     }
 }

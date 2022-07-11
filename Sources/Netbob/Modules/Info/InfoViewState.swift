@@ -24,16 +24,32 @@ class InfoViewState: ObservableObject {
         self.httpConnectionRepository = httpConnectionRepository
         self.networkInterfaceMonitor = networkInterfaceMonitor
         self.scheduler = scheduler
+    }
 
+    func onAppear() {
+        initViewData()
         configureSubscriptions()
+    }
+
+    func onDisappear() {
+        subscriptions.forEach { $0.cancel() }
+        subscriptions.removeAll()
+        interfaceViewData.removeAll()
+    }
+
+    // MARK: - Private
+
+    private func initViewData() {
+        createViewData(connections: httpConnectionRepository.current)
     }
 
     private func configureSubscriptions() {
         httpConnectionRepository
-            .connections
+            .latestConnection
             .receive(on: scheduler)
-            .sink { [weak self] connections in
-                self?.createViewData(connections: connections)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                self.createViewData(connections: self.httpConnectionRepository.current)
             }
             .store(in: &subscriptions)
 

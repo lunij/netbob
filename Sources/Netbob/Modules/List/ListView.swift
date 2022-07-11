@@ -17,6 +17,12 @@ struct ListView: View {
         }
         .navigationBarItems(trailing: navigationBarButtons)
         .activitySheet(state: $state.activitySheetState)
+        .onAppear {
+            state.onAppear()
+        }
+        .onDisappear {
+            state.onDisappear()
+        }
     }
 
     var navigationBarButtons: some View {
