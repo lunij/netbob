@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol LogFileProviderProtocol {
     func createFullLog() throws -> URL
@@ -26,7 +27,14 @@ class LogFileProvider: LogFileProviderProtocol {
     }
 
     func createFullLog() throws -> URL {
-        let string = httpConnectionRepository
+        let deviceModel = UIDevice.current.model
+        let osVersion = UIDevice.current.systemVersion
+        let appVersion = Bundle.main.appVersion
+
+        let string = "Device: \(deviceModel)\n" +
+            "OS Version: \(osVersion)\n" +
+            "App Version: \(appVersion)\n\n" +
+            httpConnectionRepository
             .current
             .map { $0.toString(includeBody: true) }
             .joined(separator: "\n\n\n\(String(repeating: "-", count: 30))\n\n\n")
@@ -37,7 +45,14 @@ class LogFileProvider: LogFileProviderProtocol {
     }
 
     func createSingleLog(from connection: HTTPConnection, includeBody: Bool) throws -> URL {
-        let string = connection.toString(includeBody: includeBody)
+        let deviceModel = UIDevice.current.model
+        let osVersion = UIDevice.current.systemVersion
+        let appVersion = Bundle.main.appVersion
+
+        let string = "Device: \(deviceModel)\n" +
+            "OS Version: \(osVersion)\n" +
+            "App Version: \(appVersion)\n\n" +
+            connection.toString(includeBody: includeBody)
         let logFileUrl = fileManager.temporaryDirectory.appendingPathComponent("single-connection.log")
         try writeAction(string, logFileUrl)
         return logFileUrl
@@ -46,6 +61,12 @@ class LogFileProvider: LogFileProviderProtocol {
 
 private func defaultWriteAction(string: String, url: URL) throws {
     try string.write(to: url, atomically: true, encoding: .utf8)
+}
+
+private extension Bundle {
+    var appVersion: String {
+        infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    }
 }
 
 private extension HTTPConnection {
