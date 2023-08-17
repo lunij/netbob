@@ -140,3 +140,5 @@ private extension HTTPConnectionViewData {
         )
     }
 }
+
+// swiftlint:enable force_unwrapping

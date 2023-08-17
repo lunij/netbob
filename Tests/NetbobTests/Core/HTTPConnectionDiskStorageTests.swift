@@ -2,8 +2,6 @@
 //  Copyright © Marc Schultz. All rights reserved.
 //
 
-// swiftlint:disable force_unwrapping implicitly_unwrapped_optional
-
 import XCTest
 @testable import Netbob
 

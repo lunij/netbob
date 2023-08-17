@@ -6,8 +6,6 @@ import SnapshotTesting
 import XCTest
 @testable import Netbob
 
-// swiftlint:disable force_unwrapping
-
 class DetailViewTests: XCTestCase {
     func test_detailView() {
         TimeZoneProvider.shared.current = TimeZone(abbreviation: "GMT")!

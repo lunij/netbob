@@ -5,8 +5,6 @@
 import XCTest
 @testable import Netbob
 
-// swiftlint:disable implicitly_unwrapped_optional
-
 class SettingsViewStateTests: XCTestCase {
     let mockHttpConnectionRepository = HTTPConnectionRepositoryMock()
 

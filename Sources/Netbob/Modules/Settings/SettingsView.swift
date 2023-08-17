@@ -38,7 +38,11 @@ struct SettingsView: View {
 
                 Section {
                     VStack {
-                        state.maxItems != nil ? Text("List limit: \(state.maxItems ?? 0)") : Text("List limit: no limit")
+                        if let maxItems = state.maxItems {
+                            Text("List limit: \(maxItems)")
+                        } else {
+                            Text("List limit: no limit")
+                        }
 
                         Slider(
                             value: maxItemsBinding,

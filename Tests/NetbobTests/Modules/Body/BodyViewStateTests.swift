@@ -5,8 +5,6 @@
 import XCTest
 @testable import Netbob
 
-// swiftlint:disable force_unwrapping
-
 class BodyViewStateTests: XCTestCase {
     func test_initializesWithImageBody() {
         let data = UIImage.testImage.pngData()!

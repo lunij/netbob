@@ -1,0 +1,16 @@
+disabled_rules:
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+opt_in_rules:
+  - closure_spacing
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  - fallthrough
+  - fatal_error_message
+  - file_name
+  - first_where
+  - force_cast
+  - multiline_arguments
+  - operator_usage_whitespace
+  - overridden_super_call
