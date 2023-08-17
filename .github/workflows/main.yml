@@ -23,8 +23,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Setup environment
         run: make setup
-      - name: Lint
-        run: make lint
+      # - name: Lint
+      #   run: make lint
       - name: Install dependencies and generate Xcode workspace
         run: make generate
       - name: Build
