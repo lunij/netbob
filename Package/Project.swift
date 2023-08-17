@@ -8,6 +8,7 @@ let name = "Netbob"
 
 let project = Project(
     name: name,
+    organizationName: "Marc Schultz",
     packages: [
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", .upToNextMajor(from: "1.9.0"))
     ],
@@ -20,9 +21,8 @@ let project = Project(
             deploymentTarget: .iOS(targetVersion: "14.0", devices: [.ipad, .iphone, .mac]),
             infoPlist: .default,
             sources: "../Sources/\(name)/**",
-            headers: .init(project: "../Sources/\(name)/**"),
-            actions: [
-                .post(script: .swiftLint, name: "Run SwiftLint")
+            scripts: [
+                .post(script: .swiftLint, name: "Run SwiftLint", basedOnDependencyAnalysis: false)
             ]
         ),
         Target(

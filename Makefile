@@ -3,25 +3,36 @@ PLATFORM='iOS Simulator,name=iPhone 12,OS=latest'
 
 export TUIST_STATS_OPT_OUT := true
 
-setup:
+.PHONY: setup-tuist
+setup-tuist:
+ifeq ($(shell which tuist),)
 	curl -Ls https://install.tuist.io | bash
-	tuist up
+else
+	@echo "Tuist is already installed, checking the version now..."
+	tuist version
+endif
 
+.PHONY: setup
+setup: setup-tuist
+
+.PHONY: edit
 edit:
-	tuist edit --permanent
-	open Manifests.xcodeproj
+	tuist edit
 
+.PHONY: generate
 generate:
+	tuist generate --no-open
+
+.PHONY: open
+open:
 	tuist generate
 
-open: generate
-open:
-	open Netbob.xcworkspace
-
+.PHONY: lint
 lint:
 	swiftformat --cache ignore --lint .
 	swiftlint --strict
 
+.PHONY: build
 build:
 	set -o pipefail && xcodebuild \
 		-workspace Netbob.xcworkspace \
@@ -31,6 +42,7 @@ build:
 		-destination platform=$(PLATFORM) \
 		build-for-testing | xcbeautify
 
+.PHONY: test
 test:
 	set -o pipefail && xcodebuild \
 		-workspace Netbob.xcworkspace \
@@ -40,10 +52,9 @@ test:
 		-destination platform=$(PLATFORM) \
 		test-without-building | xcbeautify
 
+.PHONY: clean
 clean:
 	rm -rf $(DERIVED_DATA_PATH)
 	rm -rf *.xcodeproj
 	rm -rf *.xcworkspace
 	tuist clean
-
-.PHONY: build clean edit generate lint open setup test
