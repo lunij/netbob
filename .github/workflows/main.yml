@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-test:
     name: Lint, Build, Test
-    runs-on: macOS-11
+    runs-on: macOS-12
     env:
       derived-data-path: .derivedData
     steps:
