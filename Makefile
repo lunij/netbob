@@ -3,6 +3,19 @@ PLATFORM='iOS Simulator,name=iPhone 12,OS=latest'
 
 export TUIST_STATS_OPT_OUT := true
 
+.PHONY: setup-brew
+setup-brew:
+	brew install -q \
+		swiftformat \
+		swiftlint \
+		xcbeautify
+
+.PHONY: setup-brew-ci
+setup-brew-ci:
+	brew install -q xcbeautify
+	swiftlint --version
+	swiftformat --version
+
 .PHONY: setup-tuist
 setup-tuist:
 ifeq ($(shell which tuist),)
@@ -13,7 +26,10 @@ else
 endif
 
 .PHONY: setup
-setup: setup-tuist
+setup: setup-brew setup-tuist
+
+.PHONY: setup-ci
+setup-ci: setup-brew-ci setup-tuist
 
 .PHONY: edit
 edit:
