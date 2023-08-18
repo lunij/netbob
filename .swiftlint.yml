@@ -7,7 +7,6 @@ excluded:
   - ./*/Derived
   - Derived
   - DerivedData
-  - Pods
 file_name:
   excluded:
     - Project.swift

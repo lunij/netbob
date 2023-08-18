@@ -6,8 +6,6 @@ import Foundation
 import UIKit
 @testable import Netbob
 
-// swiftlint:disable force_unwrapping
-
 extension HTTPConnection {
     static func fake(
         request: HTTPRequest = .fake(),

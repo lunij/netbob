@@ -20,7 +20,7 @@ class NetbobURLProtocol: URLProtocol {
     }
 
     override public class func canInit(with request: URLRequest) -> Bool {
-        return canServeRequest(request)
+        canServeRequest(request)
     }
 
     override public class func canInit(with task: URLSessionTask) -> Bool {

@@ -1,5 +1,5 @@
 //
-//  Copyright © 2023 Marc Schultz. All rights reserved.
+//  Copyright © Marc Schultz. All rights reserved.
 //
 
 import SnapshotTesting

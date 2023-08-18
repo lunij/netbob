@@ -6,8 +6,6 @@ import Combine
 import XCTest
 @testable import Netbob
 
-// swiftlint:disable implicitly_unwrapped_optional
-
 class InfoViewStateTests: XCTestCase {
     private let mockHttpConnectionRepository = HTTPConnectionRepositoryMock()
     private let mockNetworkInterfaceMonitor = NetworkInterfaceMonitorMock()

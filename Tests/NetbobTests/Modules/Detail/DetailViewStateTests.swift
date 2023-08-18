@@ -5,8 +5,6 @@
 import XCTest
 @testable import Netbob
 
-// swiftlint:disable force_unwrapping
-
 class DetailViewStateTests: XCTestCase {
     override func setUp() {
         super.setUp()

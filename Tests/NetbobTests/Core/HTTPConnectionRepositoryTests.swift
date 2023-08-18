@@ -6,8 +6,6 @@ import Combine
 import XCTest
 @testable import Netbob
 
-// swiftlint:disable implicitly_unwrapped_optional
-
 class HTTPConnectionRepositoryTests: XCTestCase {
     var mockDiskStorage: HTTPConnectionDiskStorageMock!
 

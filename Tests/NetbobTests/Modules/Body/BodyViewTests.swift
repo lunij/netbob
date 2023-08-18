@@ -7,8 +7,6 @@ import UIKit
 import XCTest
 @testable import Netbob
 
-// swiftlint:disable force_unwrapping
-
 class BodyViewTests: XCTestCase {
     func test_bodyView_whenImage() {
         let body = UIImage.testImage.jpegData(compressionQuality: 0.9)!
