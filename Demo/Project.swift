@@ -6,6 +6,7 @@ import ProjectDescription
 
 let project = Project(
     name: "NetbobDemo",
+    organizationName: "Marc Schultz",
     packages: [
         .package(path: "..")
     ],
