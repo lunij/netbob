@@ -14,7 +14,7 @@ class BodyViewTests: XCTestCase {
         let body = UIImage.testImage.jpegData(compressionQuality: 0.9)!
         let view = BodyView(state: BodyViewState(body: body))
 
-        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhoneSe), traits: .init(userInterfaceStyle: .light)))
+        assertSnapshot(matching: view)
     }
 
     func test_bodyView_whenText() {
@@ -23,7 +23,7 @@ class BodyViewTests: XCTestCase {
         """.data(using: .utf8)!
         let view = BodyView(state: BodyViewState(body: body))
 
-        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhoneSe), traits: .init(userInterfaceStyle: .light)))
+        assertSnapshot(matching: view)
     }
 }
 

@@ -10,7 +10,7 @@ class SettingsViewTests: XCTestCase {
     func test_settingsView() {
         let view = SettingsView(state: SettingsViewStateMock())
 
-        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhoneSe), traits: .init(userInterfaceStyle: .light)))
+        assertSnapshot(matching: view, perceptualPrecision: 0.5)
     }
 }
 

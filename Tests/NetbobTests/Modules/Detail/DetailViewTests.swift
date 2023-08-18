@@ -14,6 +14,6 @@ class DetailViewTests: XCTestCase {
 
         let view = DetailView(state: DetailViewState(connection: .fake()))
 
-        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhoneSe), traits: .init(userInterfaceStyle: .light)))
+        assertSnapshot(matching: view)
     }
 }
