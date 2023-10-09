@@ -13,6 +13,15 @@ protocol LogFileProviderProtocol {
 class LogFileProvider: LogFileProviderProtocol {
     let fileManager: FileManagerProtocol
     let httpConnectionRepository: HTTPConnectionRepositoryProtocol
+    private var phoneInformation: String {
+        let deviceModel = UIDevice.current.name
+        let osVersion = UIDevice.current.systemVersion
+        let appVersion = Bundle.main.appVersion
+
+        return "Device: \(deviceModel)\n" +
+            "OS Version: \(osVersion)\n" +
+            "App Version: \(appVersion)\n\n"
+    }
 
     private let writeAction: (String, URL) throws -> Void
 
@@ -27,13 +36,7 @@ class LogFileProvider: LogFileProviderProtocol {
     }
 
     func createFullLog() throws -> URL {
-        let deviceModel = UIDevice.current.model
-        let osVersion = UIDevice.current.systemVersion
-        let appVersion = Bundle.main.appVersion
-
-        let string = "Device: \(deviceModel)\n" +
-            "OS Version: \(osVersion)\n" +
-            "App Version: \(appVersion)\n\n" +
+        let string = phoneInformation +
             httpConnectionRepository
             .current
             .map { $0.toString(includeBody: true) }
@@ -45,13 +48,7 @@ class LogFileProvider: LogFileProviderProtocol {
     }
 
     func createSingleLog(from connection: HTTPConnection, includeBody: Bool) throws -> URL {
-        let deviceModel = UIDevice.current.model
-        let osVersion = UIDevice.current.systemVersion
-        let appVersion = Bundle.main.appVersion
-
-        let string = "Device: \(deviceModel)\n" +
-            "OS Version: \(osVersion)\n" +
-            "App Version: \(appVersion)\n\n" +
+        let string = phoneInformation +
             connection.toString(includeBody: includeBody)
         let logFileUrl = fileManager.temporaryDirectory.appendingPathComponent("single-connection.log")
         try writeAction(string, logFileUrl)
