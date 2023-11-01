@@ -18,8 +18,8 @@ import Foundation
 
     private static func swizzleProtocolSetter() {
         guard
-            let origMethod = class_getInstanceMethod(Self.self, #selector(setter: Self.protocolClasses)),
-            let newMethod = class_getInstanceMethod(Self.self, #selector(setter: Self.protocolClassesSwizzled))
+            let origMethod = class_getInstanceMethod(Self.self, #selector(setter: protocolClasses)),
+            let newMethod = class_getInstanceMethod(Self.self, #selector(setter: protocolClassesSwizzled))
         else {
             assertionFailure("\(URLSessionConfiguration.self).protocolClasses could not be swizzled")
             return
@@ -51,7 +51,7 @@ import Foundation
     private static func swizzleDefault() {
         guard
             let origMethod = class_getClassMethod(Self.self, #selector(getter: Self.default)),
-            let newMethod = class_getClassMethod(Self.self, #selector(getter: Self.defaultSwizzled))
+            let newMethod = class_getClassMethod(Self.self, #selector(getter: defaultSwizzled))
         else {
             assertionFailure("\(URLSessionConfiguration.self).default could not be swizzled")
             return
@@ -62,8 +62,8 @@ import Foundation
 
     private static func swizzleEphemeral() {
         guard
-            let origMethod = class_getClassMethod(Self.self, #selector(getter: Self.ephemeral)),
-            let newMethod = class_getClassMethod(Self.self, #selector(getter: Self.ephemeralSwizzled))
+            let origMethod = class_getClassMethod(Self.self, #selector(getter: ephemeral)),
+            let newMethod = class_getClassMethod(Self.self, #selector(getter: ephemeralSwizzled))
         else {
             assertionFailure("\(URLSessionConfiguration.self).ephemeral could not be swizzled")
             return
