@@ -7,6 +7,7 @@ import XCTest
 
 class ListViewStateTests: XCTestCase {
     let mockHttpConnectionRepository = HTTPConnectionRepositoryMock()
+    let mockLogFileProvider = LogFileProviderMock()
 
     var sut: ListViewState!
 
@@ -15,6 +16,7 @@ class ListViewStateTests: XCTestCase {
 
         sut = ListViewState(
             httpConnectionRepository: mockHttpConnectionRepository,
+            logFileProvider: mockLogFileProvider,
             scheduler: .test
         )
     }
@@ -23,6 +25,7 @@ class ListViewStateTests: XCTestCase {
         XCTAssertEqual(sut.connections.count, 0)
         mockHttpConnectionRepository.connectionSubject.send(.fake())
         XCTAssertEqual(sut.connections.count, 0)
+        XCTAssertEqual(mockLogFileProvider.calls, [])
     }
 
     func test_createsViewData() throws {
@@ -48,6 +51,7 @@ class ListViewStateTests: XCTestCase {
         XCTAssertEqual(firstConnection.requestQuery, "?a=1,b=2,c=3")
         XCTAssertEqual(firstConnection.responseStatusCode, "200")
         XCTAssertEqual(firstConnection.status, .success)
+        XCTAssertEqual(mockLogFileProvider.calls, [])
     }
 
     func test_no_subscription_after_onDisappear() {
@@ -62,5 +66,17 @@ class ListViewStateTests: XCTestCase {
         mockHttpConnectionRepository.connectionSubject.send(.fake())
 
         XCTAssertEqual(sut.connections.count, 0)
+    }
+
+    func test_handleSaveAction() {
+        sut.handleSaveAction()
+
+        XCTAssertEqual(mockLogFileProvider.calls, [.createFullLog])
+    }
+
+    func test_createFullLog() {
+        sut.handleShareAction()
+
+        XCTAssertEqual(mockLogFileProvider.calls, [.createFullLog])
     }
 }

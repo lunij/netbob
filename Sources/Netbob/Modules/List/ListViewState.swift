@@ -11,6 +11,7 @@ class ListViewStateAbstract: ObservableObject {
     func onAppear() {}
     func onDisappear() {}
     func handleShareAction() {}
+    func handleSaveAction() {}
 }
 
 final class ListViewState: ListViewStateAbstract {
@@ -47,6 +48,14 @@ final class ListViewState: ListViewStateAbstract {
         do {
             let logFileUrl = try logFileProvider.createFullLog()
             activitySheetState = ActivitySheetState(items: [logFileUrl])
+        } catch {
+            Netbob.log(String(describing: error))
+        }
+    }
+
+    override func handleSaveAction() {
+        do {
+            _ = try logFileProvider.createFullLog()
         } catch {
             Netbob.log(String(describing: error))
         }

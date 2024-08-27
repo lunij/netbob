@@ -11,6 +11,8 @@ class LogFileProviderTests: XCTestCase {
 
     var sut: LogFileProvider!
 
+    var writeActionURLs: [String] = []
+
     override func setUp() {
         super.setUp()
 
@@ -20,7 +22,9 @@ class LogFileProviderTests: XCTestCase {
         sut = LogFileProvider(
             fileManager: mockFileManager,
             httpConnectionRepository: mockConnectionRepository,
-            writeAction: { _, _ in }
+            writeAction: { _, url in
+                self.writeActionURLs.append(url.absoluteString)
+            }
         )
     }
 
@@ -30,6 +34,7 @@ class LogFileProviderTests: XCTestCase {
         XCTAssertEqual(mockFileManager.calls, [])
         XCTAssertEqual(mockConnectionRepository.calls, [])
         XCTAssertEqual(url.absoluteString, "tmp/single-connection.log")
+        XCTAssertEqual(writeActionURLs, ["tmp/single-connection.log"])
     }
 
     func test_fullLog() throws {
@@ -38,5 +43,6 @@ class LogFileProviderTests: XCTestCase {
         XCTAssertEqual(mockFileManager.calls, [])
         XCTAssertEqual(mockConnectionRepository.calls, [])
         XCTAssertEqual(url.absoluteString, "tmp/session.log")
+        XCTAssertEqual(writeActionURLs, ["tmp/session.log"])
     }
 }

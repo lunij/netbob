@@ -32,6 +32,11 @@ struct ListView: View {
             } label: {
                 Image(systemName: "square.and.arrow.up")
             }
+            Button {
+                state.handleSaveAction()
+            } label: {
+                Image(systemName: "square.and.arrow.down")
+            }
             NavigationLink(destination: InfoView(state: InfoViewState())) {
                 Image(systemName: "info.circle")
             }

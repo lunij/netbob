@@ -27,32 +27,20 @@ class LogFileProvider: LogFileProviderProtocol {
     }
 
     func createFullLog() throws -> URL {
-        let deviceModel = UIDevice.current.model
-        let osVersion = UIDevice.current.systemVersion
-        let appVersion = Bundle.main.appVersion
-
-        let string = "Device: \(deviceModel)\n" +
-            "OS Version: \(osVersion)\n" +
-            "App Version: \(appVersion)\n\n" +
+        let fullLog = .logHeader +
             httpConnectionRepository
-            .current
-            .map { $0.toString(includeBody: true) }
-            .joined(separator: "\n\n\n\(String(repeating: "-", count: 30))\n\n\n")
-
+                .current
+                .map { $0.toString(includeBody: true) }
+                .joined(separator: "\n\n\n\(String(repeating: "-", count: 30))\n\n\n")
         let logFileUrl = fileManager.temporaryDirectory.appendingPathComponent("session.log")
-        try writeAction(string, logFileUrl)
+        try writeAction(fullLog, logFileUrl)
         return logFileUrl
     }
 
     func createSingleLog(from connection: HTTPConnection, includeBody: Bool) throws -> URL {
-        let deviceModel = UIDevice.current.model
-        let osVersion = UIDevice.current.systemVersion
-        let appVersion = Bundle.main.appVersion
-
-        let string = "Device: \(deviceModel)\n" +
-            "OS Version: \(osVersion)\n" +
-            "App Version: \(appVersion)\n\n" +
+        let string = .logHeader +
             connection.toString(includeBody: includeBody)
+
         let logFileUrl = fileManager.temporaryDirectory.appendingPathComponent("single-connection.log")
         try writeAction(string, logFileUrl)
         return logFileUrl
@@ -158,5 +146,17 @@ private extension HTTPConnection {
         }
 
         return string
+    }
+}
+
+private extension String {
+    static var logHeader: Self {
+        let deviceModel = UIDevice.current.model
+        let osVersion = UIDevice.current.systemVersion
+        let appVersion = Bundle.main.appVersion
+
+        return "Device: \(deviceModel)\n" +
+            "OS Version: \(osVersion)\n" +
+            "App Version: \(appVersion)\n\n"
     }
 }
