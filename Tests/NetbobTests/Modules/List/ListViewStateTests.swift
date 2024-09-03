@@ -71,7 +71,7 @@ class ListViewStateTests: XCTestCase {
     func test_handleSaveAction() {
         sut.handleSaveAction()
 
-        XCTAssertEqual(mockLogFileProvider.calls, [.createFullLog])
+        XCTAssertEqual(mockLogFileProvider.calls, [.saveFullLog])
     }
 
     func test_createFullLog() {

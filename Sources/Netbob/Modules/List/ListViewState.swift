@@ -55,7 +55,7 @@ final class ListViewState: ListViewStateAbstract {
 
     override func handleSaveAction() {
         do {
-            _ = try logFileProvider.createFullLog()
+            try logFileProvider.saveFullLog()
         } catch {
             Netbob.log(String(describing: error))
         }

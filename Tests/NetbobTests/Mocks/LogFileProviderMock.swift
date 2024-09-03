@@ -8,6 +8,7 @@ import Foundation
 class LogFileProviderMock: LogFileProviderProtocol {
     enum Calls: Equatable {
         case createFullLog
+        case saveFullLog
         case createSingleLog(connection: HTTPConnection, includeBody: Bool)
     }
 
@@ -17,6 +18,10 @@ class LogFileProviderMock: LogFileProviderProtocol {
     func createFullLog() throws -> URL {
         calls.append(.createFullLog)
         return createFullLogReturnValue
+    }
+
+    func saveFullLog() throws {
+        calls.append(.saveFullLog)
     }
 
     var createSingleLogReturnValue = URL(string: "http://fake.fake")!

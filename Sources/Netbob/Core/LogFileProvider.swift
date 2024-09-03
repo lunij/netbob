@@ -7,6 +7,7 @@ import UIKit
 
 protocol LogFileProviderProtocol {
     func createFullLog() throws -> URL
+    func saveFullLog() throws
     func createSingleLog(from connection: HTTPConnection, includeBody: Bool) throws -> URL
 }
 
@@ -27,14 +28,15 @@ class LogFileProvider: LogFileProviderProtocol {
     }
 
     func createFullLog() throws -> URL {
-        let fullLog = .logHeader +
-            httpConnectionRepository
-                .current
-                .map { $0.toString(includeBody: true) }
-                .joined(separator: "\n\n\n\(String(repeating: "-", count: 30))\n\n\n")
         let logFileUrl = fileManager.temporaryDirectory.appendingPathComponent("session.log")
-        try writeAction(fullLog, logFileUrl)
+        try writeAction(fullLogs, logFileUrl)
         return logFileUrl
+    }
+
+    func saveFullLog() throws {
+        guard let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let logFileUrl = documentsUrl.appendingPathComponent("network-logs.txt")
+        try writeAction(fullLogs, logFileUrl)
     }
 
     func createSingleLog(from connection: HTTPConnection, includeBody: Bool) throws -> URL {
@@ -44,6 +46,15 @@ class LogFileProvider: LogFileProviderProtocol {
         let logFileUrl = fileManager.temporaryDirectory.appendingPathComponent("single-connection.log")
         try writeAction(string, logFileUrl)
         return logFileUrl
+    }
+
+    // MARK: - Private
+
+    private var fullLogs: String {
+        .logHeader + httpConnectionRepository
+            .current
+            .map { $0.toString(includeBody: true) }
+            .joined(separator: "\n\n\n\(String(repeating: "-", count: 30))\n\n\n")
     }
 }
 

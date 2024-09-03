@@ -28,7 +28,7 @@ class LogFileProviderTests: XCTestCase {
         )
     }
 
-    func test_singleLog() throws {
+    func test_createSingleLog() throws {
         let url = try sut.createSingleLog(from: .fake(), includeBody: true)
 
         XCTAssertEqual(mockFileManager.calls, [])
@@ -37,12 +37,22 @@ class LogFileProviderTests: XCTestCase {
         XCTAssertEqual(writeActionURLs, ["tmp/single-connection.log"])
     }
 
-    func test_fullLog() throws {
+    func test_createFullLog() throws {
         let url = try sut.createFullLog()
 
         XCTAssertEqual(mockFileManager.calls, [])
         XCTAssertEqual(mockConnectionRepository.calls, [])
         XCTAssertEqual(url.absoluteString, "tmp/session.log")
         XCTAssertEqual(writeActionURLs, ["tmp/session.log"])
+    }
+
+    func test_saveFullLog() throws {
+        mockFileManager.urlsReturnValue = [URL(string: "Documents")!]
+
+        try sut.saveFullLog()
+
+        XCTAssertEqual(mockFileManager.calls, [.urls])
+        XCTAssertEqual(mockConnectionRepository.calls, [])
+        XCTAssertEqual(writeActionURLs, ["Documents/network-logs.txt"])
     }
 }
