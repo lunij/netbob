@@ -3,33 +3,13 @@ PLATFORM='iOS Simulator,name=iPhone 12,OS=latest'
 
 export TUIST_STATS_OPT_OUT := true
 
-.PHONY: setup-brew
-setup-brew:
-	brew install -q \
-		swiftformat \
-		swiftlint \
-		xcbeautify
-
-.PHONY: setup-brew-ci
-setup-brew-ci:
-	brew install -q xcbeautify
-	swiftlint --version
-	swiftformat --version
-
-.PHONY: setup-tuist
-setup-tuist:
-ifeq ($(shell which tuist),)
-	curl -Ls https://install.tuist.io | bash
-else
-	@echo "Tuist is already installed, checking the version now..."
-	tuist version
-endif
+.PHONY: setup-mise
+setup-mise:
+	curl https://mise.run | sh
+	mise install
 
 .PHONY: setup
-setup: setup-brew setup-tuist
-
-.PHONY: setup-ci
-setup-ci: setup-brew-ci setup-tuist
+setup: setup-mise
 
 .PHONY: edit
 edit:

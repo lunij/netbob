@@ -19,8 +19,8 @@ jobs:
           xcode-version: latest-stable
       - name: Checkout branch
         uses: actions/checkout@v2
-      - name: Install tools
-        run: make setup-ci
+      - name: Setup Mise
+        uses: jdx/mise-action@v2
       - name: Lint
         run: make lint
       - name: Install dependencies and generate Xcode workspace
