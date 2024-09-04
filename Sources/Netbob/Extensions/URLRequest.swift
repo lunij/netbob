@@ -26,16 +26,16 @@ extension URLRequest {
             command.append("-H \u{22}\(key): \(value)\u{22}")
         }
 
-        if let bodyData = httpBodyStream?.data, let body = String(data: bodyData, encoding: .utf8) {
-            command.append("-d \u{22}\(body)\u{22}")
+        if let body = httpBodyStream?.data {
+            command.append("-d \u{22}\(body.string)\u{22}")
         }
 
         return command.joined(separator: " ")
     }
 }
 
-extension URLRequest.CachePolicy: CustomStringConvertible {
-    public var description: String {
+extension URLRequest.CachePolicy {
+    var string: String {
         switch self {
         case .useProtocolCachePolicy:
             return "UseProtocolCachePolicy"

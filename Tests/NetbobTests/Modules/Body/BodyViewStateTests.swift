@@ -18,13 +18,13 @@ class BodyViewStateTests: XCTestCase {
     }
 
     func test_initializesWithJsonBody() {
-        let data = "{}".data(using: .utf8)!
+        let data = "{}".data
         let sut = BodyViewState(body: data)
         XCTAssertEqual(sut.body, .json("{\n\n}"))
     }
 
     func test_initializesWithTextBody() {
-        let data = "fake".data(using: .utf8)!
+        let data = "fake".data
         let sut = BodyViewState(body: data)
         XCTAssertEqual(sut.body, .text("fake"))
     }

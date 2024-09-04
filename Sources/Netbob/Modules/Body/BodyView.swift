@@ -43,7 +43,7 @@ struct BodyView_Previews: PreviewProvider {
     }
 
     static var textData: Data {
-        "fakeText".data(using: .utf8)! // swiftlint:disable:this force_unwrapping
+        "fakeText".data
     }
 
     static var previews: some View {

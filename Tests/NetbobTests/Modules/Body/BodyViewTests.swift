@@ -18,7 +18,7 @@ class BodyViewTests: XCTestCase {
     func test_bodyView_whenText() {
         let body = """
         {"key": "value"}
-        """.data(using: .utf8)!
+        """.data
         let view = BodyView(state: BodyViewState(body: body))
 
         assertSnapshot(matching: view)
