@@ -28,6 +28,11 @@ lint:
 	swiftformat --cache ignore --lint .
 	swiftlint --strict
 
+.PHONY: format
+format:
+	swiftformat .
+	swiftlint --quiet --strict --no-cache --fix
+
 .PHONY: build
 build:
 	set -o pipefail && xcodebuild \
