@@ -16,7 +16,7 @@ class ListViewTests: XCTestCase {
 
         let view = ListView(state: ListViewStateMock())
 
-        assertSnapshot(matching: view)
+        assertSnapshot(of: view)
     }
 }
 
