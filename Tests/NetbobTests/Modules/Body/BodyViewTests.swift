@@ -12,16 +12,16 @@ class BodyViewTests: XCTestCase {
         let body = UIImage.testImage.jpegData(compressionQuality: 0.9)!
         let view = BodyView(state: BodyViewState(body: body))
 
-        assertSnapshot(matching: view)
+        assertSnapshot(of: view)
     }
 
     func test_bodyView_whenText() {
         let body = """
         {"key": "value"}
-        """.data(using: .utf8)!
+        """.data
         let view = BodyView(state: BodyViewState(body: body))
 
-        assertSnapshot(matching: view)
+        assertSnapshot(of: view)
     }
 }
 

@@ -12,6 +12,6 @@ class DetailViewTests: XCTestCase {
 
         let view = DetailView(state: DetailViewState(connection: .fake()))
 
-        assertSnapshot(matching: view)
+        assertSnapshot(of: view)
     }
 }

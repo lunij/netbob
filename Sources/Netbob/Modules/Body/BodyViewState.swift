@@ -12,10 +12,8 @@ class BodyViewState {
             self.body = .image(uiImage)
         } else if let string = body.prettyJson {
             self.body = .json(string)
-        } else if let string = String(data: body, encoding: .utf8) {
-            self.body = .text(string)
         } else {
-            self.body = .data(body)
+            self.body = .text(body.string)
         }
     }
 
@@ -41,7 +39,7 @@ extension Data {
         do {
             let rawJsonData = try JSONSerialization.jsonObject(with: self, options: [])
             let formattedJsonData = try JSONSerialization.data(withJSONObject: rawJsonData, options: [.prettyPrinted])
-            return String(data: formattedJsonData, encoding: .utf8)
+            return formattedJsonData.string
         } catch {
             return nil
         }

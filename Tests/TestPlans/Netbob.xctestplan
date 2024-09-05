@@ -1,0 +1,27 @@
+{
+  "configurations" : [
+    {
+      "id" : "6FFA5D6D-2787-40C1-A7E1-5DADEF303576",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "language" : "en",
+    "region" : "US",
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "NetbobTests",
+        "name" : "NetbobTests"
+      }
+    }
+  ],
+  "version" : 1
+}

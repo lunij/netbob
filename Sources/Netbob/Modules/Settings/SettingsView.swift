@@ -17,7 +17,7 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    ForEach(state.contentTypes.indices) { index in
+                    ForEach(state.contentTypes.indices, id: \.self) { index in
                         Toggle(state.contentTypes[index].name, isOn: $state.contentTypes[index].isEnabled)
                             .toggleStyle(CheckmarkToggleStyle())
                     }

@@ -10,7 +10,7 @@ class SettingsViewTests: XCTestCase {
     func test_settingsView() {
         let view = SettingsView(state: SettingsViewStateMock())
 
-        assertSnapshot(matching: view, perceptualPrecision: 0.5)
+        assertSnapshot(of: view, perceptualPrecision: 0.5)
     }
 }
 

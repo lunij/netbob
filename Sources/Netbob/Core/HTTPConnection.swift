@@ -21,7 +21,7 @@ struct HTTPRequest: Codable, Equatable {
         date: Date = Date()
     ) {
         self.date = date
-        cachePolicy = request.cachePolicy.description
+        cachePolicy = request.cachePolicy.string
         contentType = request.allHTTPHeaderFields?["Content-Type"]
         curl = request.createCurl()
         headers = request.allHTTPHeaderFields ?? [:]

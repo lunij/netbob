@@ -121,10 +121,8 @@ private extension HTTPConnection {
 
         string += "### Body\n\n"
 
-        if let body = request.body, let bodyString = body.prettyJson ?? String(data: body, encoding: .utf8) {
-            string += bodyString
-        } else if let body = request.body {
-            string += String(describing: body)
+        if let body = request.body {
+            string += body.prettyJson ?? body.string
         } else {
             string += "Request body is empty"
         }
@@ -153,10 +151,8 @@ private extension HTTPConnection {
 
         string += "### Body\n\n"
 
-        if let body = response.body, let bodyString = body.prettyJson ?? String(data: body, encoding: .utf8) {
-            string += bodyString
-        } else if let body = response.body {
-            string += String(describing: body)
+        if let body = response.body {
+            string += body.prettyJson ?? body.string
         } else {
             string += "Response body is empty"
         }

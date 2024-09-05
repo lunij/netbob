@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-test:
     name: Lint, Build, Test
-    runs-on: macOS-12
+    runs-on: macOS-latest
     env:
       derived-data-path: .derivedData
     steps:
@@ -19,8 +19,8 @@ jobs:
           xcode-version: latest-stable
       - name: Checkout branch
         uses: actions/checkout@v2
-      - name: Install tools
-        run: make setup-ci
+      - name: Setup Mise
+        uses: jdx/mise-action@v2
       - name: Lint
         run: make lint
       - name: Install dependencies and generate Xcode workspace
@@ -28,14 +28,16 @@ jobs:
       - name: Build
         run: make build
       - name: Test
+        id: test
         run: make test
       - name: Zip XCResults
-        if: ${{ failure() }}
+        id: zip-xcresults
+        if: failure() && steps.test.conclusion == 'failure'
         run: |
           cd $(dirname $(find ${{ env.derived-data-path }} -name "*.xcresult" | head -n1))
           zip -r xcresults.zip *.xcresult
       - name: Upload XCResults
-        if: ${{ failure() }}
+        if: failure() && steps.zip-xcresults.conclusion == 'success'
         uses: actions/upload-artifact@v2
         with:
           name: xcresults.zip

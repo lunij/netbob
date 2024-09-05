@@ -8,9 +8,10 @@ import XCTest
 
 extension XCTestCase {
     func assertSnapshot<Value: View>(
-        matching value: Value,
+        of value: Value,
         precision: Float = 1,
         perceptualPrecision: Float = 0.95,
+        layouts: [SwiftUISnapshotLayout] = [.device(config: .iPhoneSe)],
         named name: String? = nil,
         record recording: Bool = false,
         timeout: TimeInterval = 5,
@@ -18,20 +19,22 @@ extension XCTestCase {
         line: UInt = #line,
         testName: String = #function
     ) {
-        SnapshotTesting.assertSnapshot(
-            matching: value,
-            as: .image(
-                precision: precision,
-                perceptualPrecision: perceptualPrecision,
-                layout: .device(config: .iPhoneSe),
-                traits: .init(userInterfaceStyle: .light)
-            ),
-            named: name,
-            record: recording,
-            timeout: timeout,
-            file: file,
-            testName: testName,
-            line: line
-        )
+        for layout in layouts {
+            SnapshotTesting.assertSnapshot(
+                of: value,
+                as: .image(
+                    precision: precision,
+                    perceptualPrecision: perceptualPrecision,
+                    layout: layout,
+                    traits: .init(userInterfaceStyle: .light)
+                ),
+                named: name,
+                record: recording,
+                timeout: timeout,
+                file: file,
+                testName: testName,
+                line: line
+            )
+        }
     }
 }

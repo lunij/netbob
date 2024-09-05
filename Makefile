@@ -1,35 +1,23 @@
 DERIVED_DATA_PATH=.derivedData
-PLATFORM='iOS Simulator,name=iPhone 12,OS=latest'
+PLATFORM='iOS Simulator,name=iPhone 15,OS=17.5'
+SCHEME_PACKAGE = "Netbob"
+
+XCODEBUILD_OPTIONS = \
+	-configuration Debug \
+	-derivedDataPath $(DERIVED_DATA_PATH) \
+	-destination platform=$(PLATFORM) \
+	-scheme $(SCHEME_PACKAGE) \
+	-workspace .
 
 export TUIST_STATS_OPT_OUT := true
 
-.PHONY: setup-brew
-setup-brew:
-	brew install -q \
-		swiftformat \
-		swiftlint \
-		xcbeautify
-
-.PHONY: setup-brew-ci
-setup-brew-ci:
-	brew install -q xcbeautify
-	swiftlint --version
-	swiftformat --version
-
-.PHONY: setup-tuist
-setup-tuist:
-ifeq ($(shell which tuist),)
-	curl -Ls https://install.tuist.io | bash
-else
-	@echo "Tuist is already installed, checking the version now..."
-	tuist version
-endif
+.PHONY: setup-mise
+setup-mise:
+	curl https://mise.run | sh
+	mise install
 
 .PHONY: setup
-setup: setup-brew setup-tuist
-
-.PHONY: setup-ci
-setup-ci: setup-brew-ci setup-tuist
+setup: setup-mise
 
 .PHONY: edit
 edit:
@@ -48,25 +36,18 @@ lint:
 	swiftformat --cache ignore --lint .
 	swiftlint --strict
 
+.PHONY: format
+format:
+	swiftformat .
+	swiftlint --quiet --strict --no-cache --fix
+
 .PHONY: build
 build:
-	set -o pipefail && xcodebuild \
-		-workspace Netbob.xcworkspace \
-		-scheme Netbob \
-		-configuration Debug \
-		-derivedDataPath $(DERIVED_DATA_PATH) \
-		-destination platform=$(PLATFORM) \
-		build-for-testing | xcbeautify
+	set -o pipefail && xcodebuild $(XCODEBUILD_OPTIONS) build-for-testing | xcbeautify
 
 .PHONY: test
 test:
-	set -o pipefail && xcodebuild \
-		-workspace Netbob.xcworkspace \
-		-scheme Netbob \
-		-configuration Debug \
-		-derivedDataPath $(DERIVED_DATA_PATH) \
-		-destination platform=$(PLATFORM) \
-		test-without-building | xcbeautify
+	set -o pipefail && xcodebuild $(XCODEBUILD_OPTIONS) test-without-building | xcbeautify
 
 .PHONY: clean
 clean:
