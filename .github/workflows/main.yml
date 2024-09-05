@@ -28,14 +28,16 @@ jobs:
       - name: Build
         run: make build
       - name: Test
+        id: test
         run: make test
       - name: Zip XCResults
-        if: ${{ failure() }}
+        id: zip-xcresults
+        if: failure() && steps.test.conclusion == 'failure'
         run: |
           cd $(dirname $(find ${{ env.derived-data-path }} -name "*.xcresult" | head -n1))
           zip -r xcresults.zip *.xcresult
       - name: Upload XCResults
-        if: ${{ failure() }}
+        if: failure() && steps.zip-xcresults.conclusion == 'success'
         uses: actions/upload-artifact@v2
         with:
           name: xcresults.zip
