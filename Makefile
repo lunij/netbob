@@ -1,5 +1,5 @@
 DERIVED_DATA_PATH=.derivedData
-PLATFORM='iOS Simulator,name=iPhone 15,OS=latest'
+PLATFORM='iOS Simulator,name=iPhone 15,OS=17.5'
 SCHEME_PACKAGE = "Netbob"
 
 XCODEBUILD_OPTIONS = \
