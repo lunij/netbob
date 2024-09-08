@@ -9,6 +9,8 @@ XCODEBUILD_OPTIONS = \
 	-scheme $(SCHEME_PACKAGE) \
 	-workspace .
 
+XCODEBUILD_TEST_OPTIONS = -resultBundlePath $(DERIVED_DATA_PATH)/$(SCHEME_PACKAGE)
+
 export TUIST_STATS_OPT_OUT := true
 
 .PHONY: setup-mise
@@ -47,7 +49,7 @@ build:
 
 .PHONY: test
 test:
-	set -o pipefail && xcodebuild $(XCODEBUILD_OPTIONS) test-without-building | xcbeautify
+	set -o pipefail && xcodebuild $(XCODEBUILD_OPTIONS) $(XCODEBUILD_TEST_OPTIONS) test-without-building | xcbeautify
 
 .PHONY: clean
 clean:
