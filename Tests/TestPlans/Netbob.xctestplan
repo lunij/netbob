@@ -9,6 +9,15 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:",
+          "identifier" : "Netbob",
+          "name" : "Netbob"
+        }
+      ]
+    },
     "language" : "en",
     "region" : "US",
     "testExecutionOrdering" : "random",
