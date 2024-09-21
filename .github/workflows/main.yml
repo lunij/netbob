@@ -30,15 +30,9 @@ jobs:
       - name: Test
         id: test
         run: make test
-      - name: Zip XCResults
-        id: zip-xcresults
-        if: failure() && steps.test.conclusion == 'failure'
-        run: |
-          cd $(dirname $(find ${{ env.derived-data-path }} -name "*.xcresult" | head -n1))
-          zip -r xcresults.zip *.xcresult
-      - name: Upload XCResults
-        if: failure() && steps.zip-xcresults.conclusion == 'success'
-        uses: actions/upload-artifact@v2
+      - name: Process XCResult
+        uses: lunij/xcresult@v1
+        if: success() || failure()
         with:
-          name: xcresults.zip
-          path: ./xcresults.zip
+          path: .derivedData/Netbob.xcresult
+          title: XCResult
