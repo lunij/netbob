@@ -8,6 +8,8 @@ import Foundation
 class ListViewStateAbstract: ObservableObject {
     @Published var connections: [HTTPConnectionViewData] = []
     @Published var activitySheetState: ActivitySheetState?
+    @Published var searchText: String = ""
+
     func onAppear() {}
     func onDisappear() {}
     func handleShareAction() {}
@@ -64,7 +66,11 @@ final class ListViewState: ListViewStateAbstract {
     // MARK: - Private
 
     private func initViewData() {
-        connections = httpConnectionRepository.current
+        connections = listOfConnections
+    }
+
+    private var listOfConnections: [HTTPConnectionViewData] {
+        httpConnectionRepository.current
             .prefix(Netbob.shared.maxListItems ?? .max)
             .map(HTTPConnectionViewData.init)
     }
@@ -75,9 +81,30 @@ final class ListViewState: ListViewStateAbstract {
             .map(HTTPConnectionViewData.init)
             .receive(on: scheduler)
             .sink { [weak self] connection in
-                self?.connections.insert(connection, at: 0)
+                guard let self = self else { return }
+                if self.searchText == "" || connection.requestUrl.contains(self.searchText.lowercased()) {
+                    self.connections.insert(connection, at: 0)
+                }
             }
             .store(in: &subscriptions)
+
+        $searchText
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                if self.searchText != "" {
+                    self.connections = listOfConnections
+                        .filter { $0.requestUrl.contains(self.searchText.lowercased()) }
+                } else {
+                    self.connections = listOfConnections
+                }
+            }
+            .store(in: &subscriptions)
+    }
+}
+
+private extension HTTPConnectionViewData {
+    var requestUrl: String {
+        requestHost + requestPath
     }
 }
 

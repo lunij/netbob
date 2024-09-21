@@ -8,6 +8,9 @@ struct ListView: View {
     @StateObject var state: ListViewStateAbstract
 
     var body: some View {
+        SearchBar(text: $state.searchText)
+            .padding(.horizontal)
+
         List {
             ForEach(state.connections) { viewData in
                 NavigationLink(destination: DetailView(state: .init(connection: viewData.connection))) {
