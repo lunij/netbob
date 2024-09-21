@@ -8,7 +8,9 @@ struct ListView: View {
     @StateObject var state: ListViewStateAbstract
 
     var body: some View {
-        searchBar
+        SearchBar(text: $state.searchText)
+            .padding(.horizontal)
+
         List {
             ForEach(state.connections) { viewData in
                 NavigationLink(destination: DetailView(state: .init(connection: viewData.connection))) {
@@ -46,19 +48,6 @@ struct ListView: View {
             }
         }
         .font(.system(size: 20, weight: .light))
-    }
-
-    var searchBar: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-            TextField("Search by address", text: $state.searchText)
-        }
-        .font(.headline)
-        .padding(.top)
-        .background(
-            RoundedRectangle(cornerRadius: 25)
-                .fill(Color.white)
-        )
     }
 }
 
