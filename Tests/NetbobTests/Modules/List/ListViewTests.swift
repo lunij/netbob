@@ -30,7 +30,10 @@ class ListViewStateMock: ListViewStateAbstract {
         connections = [
             .init(.fake()),
             .init(.fake(response: nil)),
-            .init(.fake(response: .fake(httpUrlResponse: .fake(statusCode: 400))))
+            .init(.fake(response: .fake(httpUrlResponse: .fake(statusCode: 400)))),
+            .init(.fake(isFromCurrentSession: false)),
+            .init(.fake(response: nil, isFromCurrentSession: false)),
+            .init(.fake(response: .fake(httpUrlResponse: .fake(statusCode: 400)), isFromCurrentSession: false))
         ]
     }
 }

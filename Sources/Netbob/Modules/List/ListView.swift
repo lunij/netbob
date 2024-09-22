@@ -60,8 +60,8 @@ struct ListRow: View {
     var body: some View {
         HStack {
             rectangle
-                .frame(width: 10)
-                .foregroundColor(viewData.statusColor)
+                .frame(width: 6)
+                .foregroundColor(viewData.statusColor.opacity(0.8))
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
@@ -82,6 +82,7 @@ struct ListRow: View {
                 .lineLimit(4)
             }
         }
+        .opacity(viewData.isFromCurrentSession ? 1 : 0.6)
     }
 
     @ViewBuilder
@@ -99,11 +100,11 @@ extension HTTPConnectionViewData {
     var statusColor: Color {
         switch status {
         case .success:
-            return .green
+            return .systemGreen
         case .failure:
-            return .red
+            return .systemRed
         case .timeout:
-            return .orange
+            return .systemOrange
         }
     }
 }
