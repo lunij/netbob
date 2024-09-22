@@ -10,13 +10,15 @@ jobs:
   build-and-test:
     name: Lint, Build, Test
     runs-on: macOS-latest
+    permissions:
+      checks: write
     steps:
       - name: Select Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
       - name: Checkout branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup Mise
         uses: jdx/mise-action@v2
       - name: Lint
