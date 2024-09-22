@@ -24,7 +24,11 @@ struct DetailView: View {
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .edgesIgnoringSafeArea(.bottom)
-            .navigationBarItems(trailing: ShareButton(state: state))
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    ShareButton(state: state)
+                }
+            }
             .actionSheet(item: $state.actionSheetState) { state in
                 ActionSheet(state: state)
             }

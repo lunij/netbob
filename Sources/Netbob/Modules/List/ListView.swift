@@ -15,7 +15,11 @@ struct ListView: View {
                 }
             }
         }
-        .navigationBarItems(trailing: navigationBarButtons)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                navigationBarButtons
+            }
+        }
         .activitySheet(state: $state.activitySheetState)
         .searchable(text: $state.searchText, prompt: "Search ...")
         .textInputAutocapitalization(.never)
