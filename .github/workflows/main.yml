@@ -10,6 +10,8 @@ jobs:
   build-and-test:
     name: Lint, Build, Test
     runs-on: macOS-latest
+    permissions:
+      checks: write
     steps:
       - name: Select Xcode
         uses: maxim-lobanov/setup-xcode@v1
