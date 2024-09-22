@@ -15,6 +15,7 @@ struct DetailView: View {
             ResponseTab(state: state).tag(2)
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .background(Color.systemGroupedBackground)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 ShareButton(state: state)

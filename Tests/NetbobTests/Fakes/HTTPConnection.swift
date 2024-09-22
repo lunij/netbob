@@ -9,9 +9,11 @@ import UIKit
 extension HTTPConnection {
     static func fake(
         request: HTTPRequest = .fake(),
-        response: HTTPResponse? = .fake()
+        response: HTTPResponse? = .fake(),
+        isFromCurrentSession: Bool = true
     ) -> HTTPConnection {
         let connection = HTTPConnection(request: request)
+        connection.isFromCurrentSession = isFromCurrentSession
         if let response = response {
             connection.store(response: response)
         }
