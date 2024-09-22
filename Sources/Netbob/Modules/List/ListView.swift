@@ -8,9 +8,6 @@ struct ListView: View {
     @StateObject var state: ListViewStateAbstract
 
     var body: some View {
-        SearchBar(text: $state.searchText)
-            .padding(.horizontal)
-
         List {
             ForEach(state.connections) { viewData in
                 NavigationLink(destination: DetailView(state: .init(connection: viewData.connection))) {
@@ -18,8 +15,14 @@ struct ListView: View {
                 }
             }
         }
-        .navigationBarItems(trailing: navigationBarButtons)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                navigationBarButtons
+            }
+        }
         .activitySheet(state: $state.activitySheetState)
+        .searchable(text: $state.searchText, prompt: "Search ...")
+        .textInputAutocapitalization(.never)
         .onAppear {
             state.onAppear()
         }
@@ -111,7 +114,9 @@ extension HTTPConnectionViewData {
 
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        ListView(state: ListViewStateMock())
+        NavigationView {
+            ListView(state: ListViewStateMock())
+        }
     }
 }
 

@@ -8,8 +8,11 @@ struct BodyView: View {
     let state: BodyViewState
 
     var body: some View {
-        content
-            .navigationBarItems(trailing: copyButton)
+        content.toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                copyButton
+            }
+        }
     }
 
     @ViewBuilder
