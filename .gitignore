@@ -53,8 +53,15 @@ xcuserdata/
 *.xcscmblueprint
 
 # Swift Package Manager
-.package.resolved
-Package.resolved
+.swiftpm/*
+!.swiftpm/xcode/
+.swiftpm/xcode/*
+!.swiftpm/xcode/xcshareddata/
+.swiftpm/xcode/xcshareddata/*
+!.swiftpm/xcode/xcshareddata/xcschemes/
+.swiftpm/xcode/xcshareddata/xcschemes/*
+!.swiftpm/xcode/xcshareddata/xcschemes/*.xcscheme
 
 # Tuist
+.package.resolved
 **/Derived
