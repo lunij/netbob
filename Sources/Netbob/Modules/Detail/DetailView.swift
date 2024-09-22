@@ -9,31 +9,33 @@ struct DetailView: View {
     @State var selection = 0
 
     var body: some View {
-        VStack(spacing: 2) {
+        TabView(selection: $selection) {
+            GeneralTab(state: state).tag(0)
+            RequestTab(state: state).tag(1)
+            ResponseTab(state: state).tag(2)
+        }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                ShareButton(state: state)
+            }
+        }
+        .overlay(alignment: .bottom) {
             Picker("Picker", selection: $selection) {
                 Text("General").tag(0)
                 Text("Request").tag(1)
                 Text("Response").tag(2)
             }
             .pickerStyle(SegmentedPickerStyle())
-
-            TabView(selection: $selection) {
-                GeneralTab(state: state).tag(0)
-                RequestTab(state: state).tag(1)
-                ResponseTab(state: state).tag(2)
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            .edgesIgnoringSafeArea(.bottom)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    ShareButton(state: state)
-                }
-            }
-            .actionSheet(item: $state.actionSheetState) { state in
-                ActionSheet(state: state)
-            }
-            .activitySheet(state: $state.activitySheetState)
+            .padding(.horizontal)
+            .padding(.vertical, 4)
+            .frame(maxWidth: .infinity)
+            .background(.ultraThinMaterial)
         }
+        .actionSheet(item: $state.actionSheetState) { state in
+            ActionSheet(state: state)
+        }
+        .activitySheet(state: $state.activitySheetState)
     }
 }
 
