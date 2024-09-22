@@ -3,6 +3,7 @@
 //
 
 import SnapshotTesting
+import SwiftUI
 import XCTest
 @testable import Netbob
 
@@ -14,7 +15,9 @@ class ListViewTests: XCTestCase {
         }
         TimeZoneProvider.shared.current = gmt
 
-        let view = ListView(state: ListViewStateMock())
+        let view = NavigationView {
+            ListView(state: ListViewStateMock())
+        }
 
         assertSnapshot(of: view)
     }

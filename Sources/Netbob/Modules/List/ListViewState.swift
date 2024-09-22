@@ -8,7 +8,7 @@ import Foundation
 class ListViewStateAbstract: ObservableObject {
     @Published var connections: [HTTPConnectionViewData] = []
     @Published var activitySheetState: ActivitySheetState?
-    @Published var searchText: String = ""
+    @Published var searchText = ""
 
     func onAppear() {}
     func onDisappear() {}

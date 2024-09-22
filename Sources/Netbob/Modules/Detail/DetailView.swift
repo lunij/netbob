@@ -115,7 +115,9 @@ private struct ShareButton: View {
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailView(state: DetailViewStateMock())
+        NavigationView {
+            DetailView(state: DetailViewStateMock())
+        }
     }
 }
 
