@@ -11,7 +11,7 @@ let package = Package(
         .library(name: "Netbob", targets: ["Netbob"])
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", .upToNextMajor(from: "1.17.4"))
+        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", .upToNextMajor(from: "1.17.5"))
     ],
     targets: [
         .target(
